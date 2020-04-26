@@ -1,0 +1,58 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+:root {
+  --main-bg-color: #8cd790;
+}
+
+.navbar {
+  background-color: var(--main-bg-color) !important;
+  -webkit-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+  -moz-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+  box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+}
+
+.logo-header {
+  font-weight: bold;
+  color: black !important;
+}
+
+.navbar-light .navbar-toggler {
+  border: none;
+}
+
+.navbar-light .navbar-toggler:hover {
+  color: white;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.card {
+  width: 300px;
+  
+}
+
+.card:hover {
+  width: 300px;
+  -webkit-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+  -moz-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+  box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+}
