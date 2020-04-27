@@ -3,12 +3,13 @@ import SignUp from "./SignUp";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./Login";
 import Home from "./Home";
+import Dashboard from "./Dashboard";
 function Body() {
   return (
     <div className="container-fluid">
       <Switch>
         <Route exact path="/">
-          <Home/>
+          <Home />
         </Route>
         <Route path="/signup">
           <SignUp />
@@ -16,8 +17,17 @@ function Body() {
         <Route path="/login">
           <Login />
         </Route>
+        <Route path="/dashboard/:id">
+          <Dashboard />
+        </Route>
       </Switch>
     </div>
+  );
+}
+
+function PrivateRoute({children, ...rest}){
+  return(
+    <Route/>
   );
 }
 

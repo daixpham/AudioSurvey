@@ -1,101 +1,96 @@
 import React, { useState, Component } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  useHistory,
+} from "react-router-dom";
 
-class Login extends Component {
-  constructor() {
-    super();
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.users = null;
-    this.userID = null;
-    this.state = { alert: false };
-  }
-
-  async handleSubmit(event) {
+export default function Login() {
+  let users = null;
+  let userID = null;
+  const [alert,setAlert] = useState(false)
+  let routeHistory = useHistory();
+  // call when Send button pressed
+  async function handleSubmit(event) {
     event.preventDefault();
+
     let loginData = {
       username: "",
       password: "",
     };
-    const [loginStatus,setLoginStatus] = useState(null);
+
+    //Get form data
     const data = new FormData(event.target);
-    let alertDiv;
     loginData.username = data.get("username");
     loginData.password = data.get("password");
     console.log(JSON.stringify(loginData));
+    //fetch data
     let loginResponse = await fetch("https://localhost:5001/api/users");
-    this.users = await loginResponse.json();
+    users = await loginResponse.json();
 
-    this.userID = this.checkLogin(loginData);
+    userID = getLoginResult(loginData);
 
-    if (this.userID === null) {
-      this.state.alert = true;
-      console.log(this.state.alert);
+    if (userID === null) {
+      setAlert(true)
     } else {
-      console.log(this.userID);
+      console.log(userID);
+      //go to new Page
+      routeHistory.push("/dashboard/"+userID);
     }
   }
 
-  checkLogin(loginData) {
+  function getLoginResult(loginData) {
     let result = null;
-    for (let index = 0; index < this.users.length; index++) {
+    for (let index = 0; index < users.length; index++) {
       if (
-        loginData.username === this.users[index].username &&
-        loginData.password === this.users[index].password
+        loginData.username === users[index].username &&
+        loginData.password === users[index].password
       ) {
-        result = this.users[index].id;
+        result = users[index].id;
       }
     }
     return result;
   }
 
-  render() {
-    console.log(this.state.alert);
-    let alertDiv;
-    if (this.state.alert) {
-      alertDiv = <AlertDiv text="login fail"> </AlertDiv>;
-    }else{
-      alertDiv = <AlertDiv text="login succes"> </AlertDiv>;
-    }
-
-    return (
-      <div className="container">
-        <div className="vertical-center card rounded-top">
-          <h1 className="p-3">Login</h1>
-
-          {alertDiv}
-          <form className="p-3" onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="exampleInputEmail1">Username</label>
-              <input
-                type="text"
-                className="form-control"
-                id="username"
-                name="username"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                name="password"
-              />
-            </div>
-            <button type="submit" className="btn btn-primary btn-block px-1">
-              Send
-            </button>
-          </form>
-        </div>
+  return ( 
+    <div className="container">
+      <div className="vertical-center card rounded-top">
+        <h1 className="p-3 text-center">Login</h1>
+        
+        {alert ? <AlertDiv text="Username or Password is incorrect !" /> : null}
+        <form className="p-3" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="exampleInputEmail1">Username</label>
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              name="username"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              name="password"
+            />
+          </div>
+          <button type="submit" className="btn btn-primary btn-block px-3">
+            Send
+          </button>
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 function AlertDiv(props) {
   return (
-    <div className="alert alert-danger" role="alert">
+    <div className="alert alert-danger m-3 " role="alert">
       {props.text}
     </div>
   );
 }
-export default Login;

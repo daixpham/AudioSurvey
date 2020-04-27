@@ -46,12 +46,16 @@ code {
 }
 
 .card {
-  width: 300px;
-  
+  width: 400px;
+  background-color: #8080801a; 
+  border:none;
+  -webkit-box-shadow: 4px 3px 41px -4px rgb(230, 229, 229);
+  -moz-box-shadow: 4px 3px 41px -4px rgb(230, 229, 229);
+  box-shadow: 4px 3px 41px -4px rgb(230, 229, 229);
 }
 
 .card:hover {
-  width: 300px;
+  width: 400px;
   -webkit-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
   -moz-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
   box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
