@@ -26,7 +26,7 @@ export default function Login() {
     loginData.password = data.get("password");
     console.log(JSON.stringify(loginData));
     //fetch data
-    let loginResponse = await fetch("https://localhost:5001/api/users");
+    let loginResponse =  await fetch("https://localhost:5001/api/users");
     users = await loginResponse.json();
 
     userID = getLoginResult(loginData);

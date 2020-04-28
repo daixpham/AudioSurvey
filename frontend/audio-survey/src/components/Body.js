@@ -25,10 +25,6 @@ function Body() {
   );
 }
 
-function PrivateRoute({children, ...rest}){
-  return(
-    <Route/>
-  );
-}
+
 
 export default Body;

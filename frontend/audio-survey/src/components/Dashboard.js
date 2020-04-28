@@ -19,8 +19,6 @@ export const Dashboard = () => {
       }
 
     return function cleanup(){
-        console.log("YOO");
-        
         setFetch(false)
     }
   }, [userData]);
