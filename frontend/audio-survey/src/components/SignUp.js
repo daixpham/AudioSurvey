@@ -5,17 +5,14 @@ import {
   Link,
   useHistory,
 } from "react-router-dom";
-import axios from "axios";
-
+import { Spin } from "antd";
 export default function SignUp() {
-  let users = null;
-  let userID = null;
-  const [alert, setAlert] = useState(false);
   let routeHistory = useHistory();
+  const [loading, setLoading] = useState(false);
   // call when Send button pressed
   async function handleSubmit(event) {
     event.preventDefault();
-
+    setLoading(true);
     let signUpData = {
       username: "",
       password: "",
@@ -26,38 +23,33 @@ export default function SignUp() {
     signUpData.username = data.get("username");
     signUpData.password = data.get("password");
 
-    console.log(signUpData);
+    let testData = new FormData();
+    testData.append("json", JSON.stringify(signUpData));
 
-    axios
-      .post("https://localhost:5001/api/users", { signUpData })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
+    let signUpResponse = await fetch("https://localhost:5001/api/users", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(signUpData),
+    })
+      .then((response) => {
+        setTimeout(() => {
+          // go to Login 
+          routeHistory.push("/login");
+        }, 2000);
       })
-      .catch((err) => {
-        console.log(err);
-      });
-    //fetch data
-    // fetch("https://localhost:5001/api/users", {
-    //   method: "POST",
-    //   headers: {
-    //     'Accept': "*/*",
-    //     "Content-Type": "application/x-www-form-urlencoded",
-    //   },
-    //   body: JSON.stringify(signUpData),
-    // })
-    //   .then((response) => response.json)
-    //   .catch((error) => console.log("Unable to add User", error));
-
-    console.log(users);
+      .catch((error) => console.log("Unable to add User", error));
   }
 
   return (
     <div className="container">
+     
       <div className="vertical-center card rounded-top">
         <h1 className="p-3 text-center">SignUp</h1>
 
-        {alert ? <AlertDiv text="Username or Password is incorrect !" /> : null}
         <form className="p-3" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Username</label>
@@ -78,18 +70,10 @@ export default function SignUp() {
             />
           </div>
           <button type="submit" className="btn btn-primary btn-block px-3">
-            Send
+             {loading ?  <span className="px-3"><Spin  size="large"></Spin></span> : 'Send'}
           </button>
         </form>
       </div>
-    </div>
-  );
-}
-
-function AlertDiv(props) {
-  return (
-    <div className="alert alert-danger m-3 " role="alert">
-      {props.text}
     </div>
   );
 }

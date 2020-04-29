@@ -6,15 +6,18 @@ import {
   useHistory,
 } from "react-router-dom";
 
+import { Spin } from "antd";
 export default function Login() {
   let users = null;
   let userID = null;
   const [alert,setAlert] = useState(false)
+  const [loading, setLoading] = useState(false);
   let routeHistory = useHistory();
+
   // call when Send button pressed
   async function handleSubmit(event) {
     event.preventDefault();
-
+    setLoading(true)
     let loginData = {
       username: "",
       password: "",
@@ -33,10 +36,11 @@ export default function Login() {
 
     if (userID === null) {
       setAlert(true)
+      setLoading(false)
     } else {
-      console.log(userID);
       //go to new Page
-      routeHistory.push("/dashboard/"+userID);
+      setTimeout(()=>{routeHistory.push("/dashboard/"+userID);}, 1000);
+      
     }
   }
 
@@ -57,7 +61,6 @@ export default function Login() {
     <div className="container">
       <div className="vertical-center card rounded-top">
         <h1 className="p-3 text-center">Login</h1>
-        
         {alert ? <AlertDiv text="Username or Password is incorrect !" /> : null}
         <form className="p-3" onSubmit={handleSubmit}>
           <div className="form-group">
@@ -79,7 +82,7 @@ export default function Login() {
             />
           </div>
           <button type="submit" className="btn btn-primary btn-block px-3">
-            Send
+          {loading ?  <span className="px-3"><Spin  size="large"></Spin></span> : 'Send'}
           </button>
         </form>
       </div>
@@ -94,3 +97,5 @@ function AlertDiv(props) {
     </div>
   );
 }
+
+

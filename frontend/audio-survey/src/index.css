@@ -7,13 +7,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.nav-link a{
+  text-decoration: none;
+  color: white !important;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 :root {
-  --main-bg-color: #8cd790;
+  --main-bg-color: #40a7ff ;
 }
 
 .navbar {
@@ -59,4 +63,19 @@ code {
   -webkit-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
   -moz-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
   box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+}
+
+.loadingBackground{
+  opacity: 0.5;
+}
+
+.site-page-header-ghost-wrapper {
+  margin-top: 1rem;
+  -webkit-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+  -moz-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+  box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+}
+
+.icon-button{
+
 }

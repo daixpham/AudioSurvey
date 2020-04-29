@@ -2,8 +2,8 @@ using AudioSurveyApi.Models;
 using AudioSurveyApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-
-namespace AudioSurveyApi.Controllers 
+using System;
+namespace AudioSurveyApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,7 +17,7 @@ namespace AudioSurveyApi.Controllers
         }
 
         [HttpGet]
-      
+
         public ActionResult<List<User>> Get() =>
             _userService.Get();
 
@@ -37,10 +37,10 @@ namespace AudioSurveyApi.Controllers
         [HttpPost]
         public ActionResult<User> Create(User user)
         {
-            //todo : Convert String to JSON 
+            
             _userService.Create(user);
-
-            return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
+            
+            return CreatedAtRoute("GetUser", new { id = user.Id }, user);
         }
 
         [HttpPut("{id:length(24)}")]

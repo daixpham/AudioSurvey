@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using AudioSurveyApi.Models;
 using Microsoft.Extensions.Options;
 using AudioSurveyApi.Services;
+using Microsoft.AspNetCore.Mvc.Cors;
 namespace AudioSurveyApi
 {
     public class Startup
@@ -27,7 +28,12 @@ namespace AudioSurveyApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowMyOrigin", builder => builder.WithOrigins("http://localhost:3000"));
+            });
+            // services.AddMvc(options => options.EnableEndpointRouting = false);
+
             services.Configure<AudioSurveyDatabaseSettings>(
                 Configuration.GetSection(nameof(AudioSurveyDatabaseSettings)));
 
@@ -37,7 +43,7 @@ namespace AudioSurveyApi
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipelin
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -45,12 +51,13 @@ namespace AudioSurveyApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors( options => options.WithOrigins("http://localhost:3000").AllowAnyMethod() );
+            app.UseRouting();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseHttpsRedirection();
-           
-            app.UseRouting();
+
+            // to allow send Headers to Webservices !important 
+            app.UseCors(options => options.WithOrigins("http://localhost:3000").AllowAnyMethod().WithOrigins("http://localhost:3000").AllowAnyHeader());
 
             app.UseAuthorization();
 
