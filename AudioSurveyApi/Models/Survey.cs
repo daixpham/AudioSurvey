@@ -1,18 +1,20 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Collections;
+
 namespace AudioSurveyApi.Models
 {
-    public class User
+    public class Survey
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         [BsonElement("Name")]
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Surveyname { get; set; }
+
+        public string Question { get; set; }
+
         [BsonRepresentation(BsonType.ObjectId)]
-        public string[] Surveys { get; set; }
+        public string Owner { get; set; }
     }
 }

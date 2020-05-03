@@ -32,14 +32,14 @@ namespace AudioSurveyApi
             {
                 options.AddPolicy("AllowMyOrigin", builder => builder.WithOrigins("http://localhost:3000"));
             });
-            // services.AddMvc(options => options.EnableEndpointRouting = false);
-
+        
             services.Configure<AudioSurveyDatabaseSettings>(
                 Configuration.GetSection(nameof(AudioSurveyDatabaseSettings)));
 
             services.AddSingleton<IAudioSurveyDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<AudioSurveyDatabaseSettings>>().Value);
             services.AddSingleton<UserServices>();
+             services.AddSingleton<SurveysServices>();
             services.AddControllers();
         }
 

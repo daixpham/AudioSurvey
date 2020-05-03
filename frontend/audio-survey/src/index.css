@@ -1,3 +1,5 @@
+
+@import '~antd/dist/antd.css';
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -7,7 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.nav-link a{
+.nav-link > a{
   text-decoration: none;
   color: white !important;
 }
@@ -76,6 +78,24 @@ code {
   box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
 }
 
-.icon-button{
+.dashboard-main-card{
+  margin-top: 2rem;
+  padding: 1rem;
+  width: 100%;
+  min-height: 600px;
+  -webkit-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+  -moz-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+  box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
+}
 
+.glow-on-hover{
+  background-color: lightgrey;
+}
+
+#components-dropdown-demo-dropdown-button .ant-dropdown-button {
+  margin: 0 8px 8px 0;
+}
+
+#components-dropdown-demo-dropdown-button .ant-btn-group-rtl.ant-dropdown-button {
+  margin: 0 0 8px 8px;
 }
