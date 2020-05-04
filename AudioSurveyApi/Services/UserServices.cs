@@ -4,7 +4,8 @@ using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using Newtonsoft.Json; 
+using MongoDB.Bson.Serialization;
+using Newtonsoft.Json;
 namespace AudioSurveyApi.Services
 {
     public class UserServices
@@ -22,9 +23,14 @@ namespace AudioSurveyApi.Services
         public List<User> Get() =>
             _users.Find(user => true).ToList();
 
-        public User Get(string id) {
-            Console.WriteLine(id);
-           return _users.Find<User>(user => user.Id == id).FirstOrDefault();
+        public User Get(string id)
+        {
+           
+            var result = _users.Find<User>(user => user.Id == id).FirstOrDefault();
+            var test = BsonSerializer.Deserialize<BsonDocument>(result.ToJson());
+            Console.WriteLine("YOO"+test);
+           // https://stackoverflow.com/questions/9478613/how-to-deserialize-a-bsondocument-object-back-to-class/9479341
+            return (User)test;
         }
 
         public User Create(User user)
@@ -39,7 +45,7 @@ namespace AudioSurveyApi.Services
             // JObject json = JObject.Parse(postBsonDoc.ToJson<MongoDB.Bson.BsonDocument>(jsonWriterSettings));
             //var survey = surveyIn.ToString();
             var survey = BsonDocument.Parse(surveyIn.ToString());
-           // var survey = JsonConvert.DeserializeObject<BsonDocument>(surveyIn);
+            // var survey = JsonConvert.DeserializeObject<BsonDocument>(surveyIn);
             //Console.WriteLine("User Id " + id);
             //Console.WriteLine("UserSurvey " + surveyIn);
             Console.WriteLine(survey);

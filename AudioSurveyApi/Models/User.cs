@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections;
+using System.Collections.Generic;
 namespace AudioSurveyApi.Models
 {
     public class User
@@ -13,6 +14,6 @@ namespace AudioSurveyApi.Models
         public string Username { get; set; }
         public string Password { get; set; }
         //todo : when call methode get -> return objectType (object) , when call methode Set -> return objectType(BsonDocument)
-        public BsonDocument[] Surveys { get; set; }
+        public List<BsonDocument> Surveys { get; set; }
     }
 }
