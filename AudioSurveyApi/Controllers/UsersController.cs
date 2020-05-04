@@ -3,6 +3,8 @@ using AudioSurveyApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using MongoDB.Bson;
+using Newtonsoft.Json; 
 namespace AudioSurveyApi.Controllers
 {
     [Route("api/[controller]")]
@@ -30,7 +32,7 @@ namespace AudioSurveyApi.Controllers
             {
                 return NotFound();
             }
-
+            
             return user;
         }
 
@@ -41,6 +43,18 @@ namespace AudioSurveyApi.Controllers
             _userService.Create(user);
             
             return CreatedAtRoute("GetUser", new { id = user.Id }, user);
+        }
+
+        [HttpPut("{id:length(24)}/surveyUpdate")]
+        public IActionResult UpdateUserSurvey(string id, object surveyIn)
+        {
+            var user = _userService.Get(id);
+            if(user == null){
+                return NotFound(); 
+            }
+            _userService.UpdateUserSurvey(id, surveyIn);
+            
+            return NoContent();
         }
 
         [HttpPut("{id:length(24)}")]

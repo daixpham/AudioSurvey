@@ -1,8 +1,10 @@
 using AudioSurveyApi.Models;
 using MongoDB.Driver;
+using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
-
+using System;
+using Newtonsoft.Json; 
 namespace AudioSurveyApi.Services
 {
     public class UserServices
@@ -20,8 +22,10 @@ namespace AudioSurveyApi.Services
         public List<User> Get() =>
             _users.Find(user => true).ToList();
 
-        public User Get(string id) =>
-            _users.Find<User>(user => user.Id == id).FirstOrDefault();
+        public User Get(string id) {
+            Console.WriteLine(id);
+           return _users.Find<User>(user => user.Id == id).FirstOrDefault();
+        }
 
         public User Create(User user)
         {
@@ -29,13 +33,27 @@ namespace AudioSurveyApi.Services
             return user;
         }
 
+        public void UpdateUserSurvey(string id, object surveyIn)
+        {
+            // var jsonWriterSettings = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
+            // JObject json = JObject.Parse(postBsonDoc.ToJson<MongoDB.Bson.BsonDocument>(jsonWriterSettings));
+            //var survey = surveyIn.ToString();
+            var survey = BsonDocument.Parse(surveyIn.ToString());
+           // var survey = JsonConvert.DeserializeObject<BsonDocument>(surveyIn);
+            //Console.WriteLine("User Id " + id);
+            //Console.WriteLine("UserSurvey " + surveyIn);
+            Console.WriteLine(survey);
+            var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(id));
+            var update = Builders<User>.Update.Push("Surveys", survey);
+            _users.UpdateOneAsync(filter, update);
+        }
         public void Update(string id, User userIn) =>
             _users.ReplaceOne(user => user.Id == id, userIn);
 
         public void Remove(User userIn) =>
             _users.DeleteOne(user => user.Id == userIn.Id);
 
-        public void Remove(string id) => 
+        public void Remove(string id) =>
             _users.DeleteOne(user => user.Id == id);
     }
 }

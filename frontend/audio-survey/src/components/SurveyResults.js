@@ -27,9 +27,8 @@ export const SurveyResults = () => {
     if (_fetch) {
       fetchUserData();
       // get Surveys from User
-      userData.surveys.forEach(element => {
-        
-      });
+      console.log(userData);
+      
     }
 
     // componentWillUnmount

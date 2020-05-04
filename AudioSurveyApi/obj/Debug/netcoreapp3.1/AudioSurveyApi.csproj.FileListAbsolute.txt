@@ -52,3 +52,4 @@ C:\Users\DA2052\Documents\AudioSurvey\AudioSurveyApi\obj\Debug\netcoreapp3.1\sta
 C:\Users\DA2052\Documents\AudioSurvey\AudioSurveyApi\obj\Debug\netcoreapp3.1\AudioSurveyApi.dll
 C:\Users\DA2052\Documents\AudioSurvey\AudioSurveyApi\obj\Debug\netcoreapp3.1\AudioSurveyApi.pdb
 C:\Users\DA2052\Documents\AudioSurvey\AudioSurveyApi\obj\Debug\netcoreapp3.1\AudioSurveyApi.genruntimeconfig.cache
+C:\Users\DA2052\Documents\AudioSurvey\AudioSurveyApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll

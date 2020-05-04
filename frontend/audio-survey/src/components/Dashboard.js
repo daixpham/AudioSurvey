@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, useParams } from "react-router-dom";
 import { PageHeader, Button, Descriptions } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import SurveyResults from "./SurveyResults";
@@ -30,6 +26,52 @@ export const Dashboard = () => {
     setUserData(data);
   }
 
+   function createNewSurvey() {
+    let surveys = {
+      name: "TEST",
+      interviewed:0,
+      questions: [
+        {
+          question: "frage1",
+          audios: [
+            {
+              name: "audio1",
+              url: "sfdf/GFSDFwerwer",
+              answer:[{text:"ewre", checked:0}]
+            },
+            {
+              name: "audio2",
+              url: "sfdf/GFSDFwerwer",
+              answer:[{text:"ewre", checked:0}]
+            },
+          ],
+        },
+        {
+          question: "frage2",
+          audios: [
+            {
+              name: "audio1",
+              url: "sfdf/GFSDFwerwer",
+              answer:[{text:"ewre", checked:0}]
+            },
+            {
+              name: "audio2",
+              url: "sfdf/GFSDFwerwer",
+              answer:[{text:"ewre", checked:0}]
+            },
+          ],
+        },
+      ],
+    };
+    // let createSurveyRequest = await fetch(
+    //   "https://localhost:5001/api/users/" + id,
+    //   {}
+    // );
+
+    console.log(surveys);
+    
+  }
+
   return (
     <div>
       <div className="site-page-header-ghost-wrapper">
@@ -38,7 +80,7 @@ export const Dashboard = () => {
           onBack={() => window.history.back()}
           title="Dashboard"
           extra={[
-            <Button key="1" type="primary">
+            <Button key="1" onClick={() => createNewSurvey()} type="primary">
               <div>
                 <PlusOutlined />
                 New Survey
