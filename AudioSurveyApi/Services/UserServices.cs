@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using MongoDB.Bson.Serialization;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 namespace AudioSurveyApi.Services
 {
     public class UserServices
@@ -25,32 +26,34 @@ namespace AudioSurveyApi.Services
 
         public User Get(string id)
         {
-           
             var result = _users.Find<User>(user => user.Id == id).FirstOrDefault();
-            var test = BsonSerializer.Deserialize<BsonDocument>(result.ToJson());
-            Console.WriteLine("YOO"+test);
-           // https://stackoverflow.com/questions/9478613/how-to-deserialize-a-bsondocument-object-back-to-class/9479341
-            return (User)test;
+            return result;
+        }
+
+        public Boolean GetUserAuth(User user)
+        {
+            Boolean result = false;
+            var builder = Builders<User>.Filter;
+            var filter = builder.Eq("Password", user.Password);
+            var getUser =  _users.Find(filter).FirstOrDefault();
+            if(getUser.ToJson() != null){
+                result = true;
+            }
+            Console.WriteLine("result " + result.ToJson());
+            return result;
         }
 
         public User Create(User user)
         {
+            Console.WriteLine("Insert " + user.ToJson());
             _users.InsertOne(user);
             return user;
         }
 
-        public void UpdateUserSurvey(string id, object surveyIn)
+        public void UpdateUserSurvey(string id, Survey surveyIn)
         {
-            // var jsonWriterSettings = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
-            // JObject json = JObject.Parse(postBsonDoc.ToJson<MongoDB.Bson.BsonDocument>(jsonWriterSettings));
-            //var survey = surveyIn.ToString();
-            var survey = BsonDocument.Parse(surveyIn.ToString());
-            // var survey = JsonConvert.DeserializeObject<BsonDocument>(surveyIn);
-            //Console.WriteLine("User Id " + id);
-            //Console.WriteLine("UserSurvey " + surveyIn);
-            Console.WriteLine(survey);
             var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(id));
-            var update = Builders<User>.Update.Push("Surveys", survey);
+            var update = Builders<User>.Update.Push("Surveys", surveyIn);
             _users.UpdateOneAsync(filter, update);
         }
         public void Update(string id, User userIn) =>

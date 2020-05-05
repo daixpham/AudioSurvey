@@ -39,7 +39,7 @@ namespace AudioSurveyApi
             services.AddSingleton<IAudioSurveyDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<AudioSurveyDatabaseSettings>>().Value);
             services.AddSingleton<UserServices>();
-             services.AddSingleton<SurveysServices>();
+             
             services.AddControllers();
         }
 

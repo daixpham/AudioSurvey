@@ -12,8 +12,9 @@ namespace AudioSurveyApi.Models
 
         [BsonElement("Name")]
         public string Username { get; set; }
+        [BsonElement("Password")]
         public string Password { get; set; }
         //todo : when call methode get -> return objectType (object) , when call methode Set -> return objectType(BsonDocument)
-        public List<BsonDocument> Surveys { get; set; }
+        public Survey[] Surveys { get; set;}
     }
 }

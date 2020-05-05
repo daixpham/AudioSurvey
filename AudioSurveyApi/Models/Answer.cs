@@ -3,13 +3,13 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace AudioSurveyApi.Models
 {
-    public class Survey
+    public class Answer
     {
         
 
-        public string Surveyname { get; set; }
+        public string AnswerText { get; set; }
 
-        public Question[] Questions { get; set; }
+        public int Checked { get; set; }
 
       
     }

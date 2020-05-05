@@ -16,6 +16,7 @@ export default function SignUp() {
     let signUpData = {
       username: "",
       password: "",
+      surveys:[]
     };
 
     //Get form data

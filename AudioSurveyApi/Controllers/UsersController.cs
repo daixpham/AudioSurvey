@@ -36,6 +36,20 @@ namespace AudioSurveyApi.Controllers
             return user;
         }
 
+        [HttpGet("auth", Name = "GetUserAuth")]
+        public ActionResult<Boolean> GetUserAuth(User user)
+        {   
+         
+            var getUser = _userService.GetUserAuth(user);
+            Console.WriteLine(getUser);
+            // if (user == null)
+            // {
+            //     return NotFound();
+            // }
+            
+            return getUser;
+        }
+
         [HttpPost]
         public ActionResult<User> Create(User user)
         {
@@ -46,8 +60,9 @@ namespace AudioSurveyApi.Controllers
         }
 
         [HttpPut("{id:length(24)}/surveyUpdate")]
-        public IActionResult UpdateUserSurvey(string id, object surveyIn)
+        public IActionResult UpdateUserSurvey(string id, Survey surveyIn)
         {
+            
             var user = _userService.Get(id);
             if(user == null){
                 return NotFound(); 
