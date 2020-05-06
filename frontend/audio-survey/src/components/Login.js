@@ -7,57 +7,52 @@ import {
 } from "react-router-dom";
 
 import { Spin } from "antd";
+
 export default function Login() {
-  let users = null;
-  let userID = null;
-  const [alert,setAlert] = useState(false)
+  const [alert, setAlert] = useState(false);
   const [loading, setLoading] = useState(false);
   let routeHistory = useHistory();
+  let loginData = {
+    username: "",
+    password: "",
+  };
 
   // call when Send button pressed
   async function handleSubmit(event) {
     event.preventDefault();
-    setLoading(true)
-    let loginData = {
-      username: "",
-      password: "",
-    };
+    setLoading(true);
 
     //Get form data
     const data = new FormData(event.target);
     loginData.username = data.get("username");
     loginData.password = data.get("password");
     console.log(JSON.stringify(loginData));
-    //fetch data
-    let loginResponse =  await fetch("https://localhost:5001/api/users");
-    users = await loginResponse.json();
 
-    userID = getLoginResult(loginData);
-
-    if (userID === null) {
-      setAlert(true)
-      setLoading(false)
-    } else {
-      //go to new Page
-      setTimeout(()=>{routeHistory.push("/dashboard/"+userID);}, 1000);
-      
-    }
+    let authResponse = await fetch("https://localhost:5001/api/users/auth", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((value) => {
+        if (value === "") {
+          setAlert(true);
+          setLoading(false);
+        } else {
+          //go to Dashboard Page
+          routeHistory.push("/dashboard/" + value);
+        }
+      })
+      .catch((error) => console.log("Unable to Auth", error));
   }
 
-  function getLoginResult(loginData) {
-    let result = null;
-    for (let index = 0; index < users.length; index++) {
-      if (
-        loginData.username === users[index].username &&
-        loginData.password === users[index].password
-      ) {
-        result = users[index].id;
-      }
-    }
-    return result;
-  }
-
-  return ( 
+  return (
     <div className="container">
       <div className="vertical-center card rounded-top">
         <h1 className="p-3 text-center">Login</h1>
@@ -82,7 +77,13 @@ export default function Login() {
             />
           </div>
           <button type="submit" className="btn btn-primary btn-block px-3">
-          {loading ?  <span className="px-3"><Spin  size="large"></Spin></span> : 'Send'}
+            {loading ? (
+              <span className="px-3">
+                <Spin size="large"></Spin>
+              </span>
+            ) : (
+              "Send"
+            )}
           </button>
         </form>
       </div>
@@ -97,5 +98,3 @@ function AlertDiv(props) {
     </div>
   );
 }
-
-

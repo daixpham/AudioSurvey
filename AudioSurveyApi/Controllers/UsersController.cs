@@ -3,8 +3,9 @@ using AudioSurveyApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+
 using MongoDB.Bson;
-using Newtonsoft.Json; 
+using Newtonsoft.Json;
 namespace AudioSurveyApi.Controllers
 {
     [Route("api/[controller]")]
@@ -32,43 +33,41 @@ namespace AudioSurveyApi.Controllers
             {
                 return NotFound();
             }
-            
+
+            user.Password = "stay secret";
+
             return user;
         }
+       
+        [HttpPost("auth", Name = "GetUserAuth")]
+        public ActionResult<String> UserAuth(User user)
+        {
 
-        [HttpGet("auth", Name = "GetUserAuth")]
-        public ActionResult<Boolean> GetUserAuth(User user)
-        {   
-         
-            var getUser = _userService.GetUserAuth(user);
-            Console.WriteLine(getUser);
-            // if (user == null)
-            // {
-            //     return NotFound();
-            // }
-            
-            return getUser;
+            var userId = _userService.GetUserAuthStatus(user);
+
+            return userId;
         }
 
         [HttpPost]
         public ActionResult<User> Create(User user)
         {
-            
+
             _userService.Create(user);
-            
+
             return CreatedAtRoute("GetUser", new { id = user.Id }, user);
         }
 
         [HttpPut("{id:length(24)}/surveyUpdate")]
         public IActionResult UpdateUserSurvey(string id, Survey surveyIn)
         {
-            
+
             var user = _userService.Get(id);
-            if(user == null){
-                return NotFound(); 
+            if (user == null)
+            {
+                return NotFound();
             }
             _userService.UpdateUserSurvey(id, surveyIn);
-            
+
             return NoContent();
         }
 

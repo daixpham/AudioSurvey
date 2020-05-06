@@ -6,9 +6,11 @@ import {
   useHistory,
 } from "react-router-dom";
 import { Spin } from "antd";
+
 export default function SignUp() {
   let routeHistory = useHistory();
   const [loading, setLoading] = useState(false);
+
   // call when Send button pressed
   async function handleSubmit(event) {
     event.preventDefault();
@@ -16,7 +18,7 @@ export default function SignUp() {
     let signUpData = {
       username: "",
       password: "",
-      surveys:[]
+      surveys: [],
     };
 
     //Get form data
@@ -38,7 +40,7 @@ export default function SignUp() {
     })
       .then((response) => {
         setTimeout(() => {
-          // go to Login 
+          // go to Login
           routeHistory.push("/login");
         }, 2000);
       })
@@ -47,7 +49,6 @@ export default function SignUp() {
 
   return (
     <div className="container">
-     
       <div className="vertical-center card rounded-top">
         <h1 className="p-3 text-center">SignUp</h1>
 
@@ -71,7 +72,13 @@ export default function SignUp() {
             />
           </div>
           <button type="submit" className="btn btn-primary btn-block px-3">
-             {loading ?  <span className="px-3"><Spin  size="large"></Spin></span> : 'Send'}
+            {loading ? (
+              <span className="px-3">
+                <Spin size="large"></Spin>
+              </span>
+            ) : (
+              "Send"
+            )}
           </button>
         </form>
       </div>

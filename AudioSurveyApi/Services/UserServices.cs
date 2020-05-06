@@ -30,17 +30,19 @@ namespace AudioSurveyApi.Services
             return result;
         }
 
-        public Boolean GetUserAuth(User user)
+        public String GetUserAuthStatus(User userIn)
         {
-            Boolean result = false;
+            string userId = "";
             var builder = Builders<User>.Filter;
-            var filter = builder.Eq("Password", user.Password);
-            var getUser =  _users.Find(filter).FirstOrDefault();
-            if(getUser.ToJson() != null){
-                result = true;
+            var nameFilter = builder.Eq("Name", userIn.Username);
+            var passwordFilter = builder.Eq("Password", userIn.Password);
+            var combineFilter = builder.And(nameFilter,passwordFilter);
+            var user =  _users.Find(combineFilter).FirstOrDefault();
+            if(user.ToJson() != "null"){
+                userId = user.Id;
             }
-            Console.WriteLine("result " + result.ToJson());
-            return result;
+            Console.WriteLine("result " + userId);
+            return userId;
         }
 
         public User Create(User user)

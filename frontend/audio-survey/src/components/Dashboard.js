@@ -6,70 +6,71 @@ import SurveyResults from "./SurveyResults";
 export const Dashboard = () => {
   let { id } = useParams();
   const [_fetch, setFetch] = useState(true);
-  const [userData, setUserData] = useState("");
-
+  const [userData, setUserData] = useState({});
+  const [surveysLength, setSurveysLength] = useState(0);
   //onInit
   useEffect(() => {
     if (_fetch) {
-      fetchUserData();
+      fetch("https://localhost:5001/api/users/" + id)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setUserData(data);
+          setSurveysLength(data.surveys.length)
+        })
+        .catch((error) => console.log(error));
     }
 
-    // componentWillUnmount
+    //componentWillUnmount
     return function cleanup() {
       setFetch(false);
     };
-  }, [userData]);
+  });
 
-  async function fetchUserData() {
-    let loginResponse = await fetch("https://localhost:5001/api/users/" + id);
-    let data = await loginResponse.json();
-    setUserData(data);
-  }
 
-   function createNewSurvey() {
-    let surveys = {
-      name: "TEST",
-      interviewed:0,
-      questions: [
-        {
-          question: "frage1",
-          audios: [
-            {
-              name: "audio1",
-              url: "sfdf/GFSDFwerwer",
-              answer:[{text:"ewre", checked:0}]
-            },
-            {
-              name: "audio2",
-              url: "sfdf/GFSDFwerwer",
-              answer:[{text:"ewre", checked:0}]
-            },
-          ],
-        },
-        {
-          question: "frage2",
-          audios: [
-            {
-              name: "audio1",
-              url: "sfdf/GFSDFwerwer",
-              answer:[{text:"ewre", checked:0}]
-            },
-            {
-              name: "audio2",
-              url: "sfdf/GFSDFwerwer",
-              answer:[{text:"ewre", checked:0}]
-            },
-          ],
-        },
-      ],
-    };
-    // let createSurveyRequest = await fetch(
-    //   "https://localhost:5001/api/users/" + id,
-    //   {}
-    // );
-
-    console.log(surveys);
-    
+  function createNewSurvey() {
+    // let surveys = {
+    //   name: "TEST",
+    //   interviewed: 0,
+    //   questions: [
+    //     {
+    //       question: "frage1",
+    //       audios: [
+    //         {
+    //           name: "audio1",
+    //           url: "sfdf/GFSDFwerwer",
+    //           answer: [{ text: "ewre", checked: 0 }],
+    //         },
+    //         {
+    //           name: "audio2",
+    //           url: "sfdf/GFSDFwerwer",
+    //           answer: [{ text: "ewre", checked: 0 }],
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       question: "frage2",
+    //       audios: [
+    //         {
+    //           name: "audio1",
+    //           url: "sfdf/GFSDFwerwer",
+    //           answer: [{ text: "ewre", checked: 0 }],
+    //         },
+    //         {
+    //           name: "audio2",
+    //           url: "sfdf/GFSDFwerwer",
+    //           answer: [{ text: "ewre", checked: 0 }],
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // };
+    // // let createSurveyRequest = await fetch(
+    // //   "https://localhost:5001/api/users/" + id,
+    // //   {}
+    // // );
+    // console.log(surveys);
   }
 
   return (
@@ -93,7 +94,7 @@ export const Dashboard = () => {
               {userData.username}
             </Descriptions.Item>
             <Descriptions.Item label="Total Survey">
-              <a>421421</a>
+              <a>{surveysLength}</a>
             </Descriptions.Item>
             <Descriptions.Item label="Active Survey">3</Descriptions.Item>
           </Descriptions>
