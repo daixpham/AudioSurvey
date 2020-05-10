@@ -1,111 +1,76 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, useParams } from "react-router-dom";
+import React from "react";
 import { PageHeader, Button, Descriptions } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import SurveyResults from "./SurveyResults";
-export const Dashboard = () => {
-  let { id } = useParams();
-  const [_fetch, setFetch] = useState(true);
-  const [userData, setUserData] = useState({});
-  const [surveysLength, setSurveysLength] = useState(0);
+
+class Dashboard extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = { userData: null, surveysLength: 0 };
+  }
+  
+
   //onInit
-  useEffect(() => {
-    if (_fetch) {
-      fetch("https://localhost:5001/api/users/" + id)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          setUserData(data);
-          setSurveysLength(data.surveys.length)
-        })
-        .catch((error) => console.log(error));
-    }
-
-    //componentWillUnmount
-    return function cleanup() {
-      setFetch(false);
-    };
-  });
-
-
-  function createNewSurvey() {
-    // let surveys = {
-    //   name: "TEST",
-    //   interviewed: 0,
-    //   questions: [
-    //     {
-    //       question: "frage1",
-    //       audios: [
-    //         {
-    //           name: "audio1",
-    //           url: "sfdf/GFSDFwerwer",
-    //           answer: [{ text: "ewre", checked: 0 }],
-    //         },
-    //         {
-    //           name: "audio2",
-    //           url: "sfdf/GFSDFwerwer",
-    //           answer: [{ text: "ewre", checked: 0 }],
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       question: "frage2",
-    //       audios: [
-    //         {
-    //           name: "audio1",
-    //           url: "sfdf/GFSDFwerwer",
-    //           answer: [{ text: "ewre", checked: 0 }],
-    //         },
-    //         {
-    //           name: "audio2",
-    //           url: "sfdf/GFSDFwerwer",
-    //           answer: [{ text: "ewre", checked: 0 }],
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // };
-    // // let createSurveyRequest = await fetch(
-    // //   "https://localhost:5001/api/users/" + id,
-    // //   {}
-    // // );
-    // console.log(surveys);
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    fetch("https://localhost:5001/api/users/"+id )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        
+        this.setState({ userData: data });
+        console.log(this.state.userData);
+        
+      })
+      .catch((error) => console.log(error));
   }
 
-  return (
-    <div>
-      <div className="site-page-header-ghost-wrapper">
-        <PageHeader
-          ghost={false}
-          onBack={() => window.history.back()}
-          title="Dashboard"
-          extra={[
-            <Button key="1" onClick={() => createNewSurvey()} type="primary">
-              <div>
-                <PlusOutlined />
-                New Survey
-              </div>
-            </Button>,
-          ]}
-        >
-          <Descriptions size="small" column={3}>
-            <Descriptions.Item label="User">
-              {userData.username}
-            </Descriptions.Item>
-            <Descriptions.Item label="Total Survey">
-              <a>{surveysLength}</a>
-            </Descriptions.Item>
-            <Descriptions.Item label="Active Survey">3</Descriptions.Item>
-          </Descriptions>
-        </PageHeader>
-      </div>
+  createNewSurvey() {}
 
-      <div className="dashboard-main-card ">
-        <SurveyResults></SurveyResults>
+  render() {
+    
+    if(this.state.userData === null ){ return null}
+   
+    
+    return (
+      <div>
+        <div className="site-page-header-ghost-wrapper">
+          <PageHeader
+            ghost={false}
+            onBack={() => window.history.back()}
+            title="Dashboard"
+            extra={[
+              <Button
+                key="1"
+                onClick={() => this.createNewSurvey()}
+                type="primary"
+              >
+                <div>
+                  <PlusOutlined />
+                  New Survey
+                </div>
+              </Button>,
+            ]}
+          >
+            <Descriptions size="small" column={3}>
+              <Descriptions.Item label="User">
+                {this.state.userData.username}
+              </Descriptions.Item>
+              <Descriptions.Item label="Total Survey">
+                <a>{this.state.userData.surveys.length}</a>
+              </Descriptions.Item>
+              <Descriptions.Item label="Active Survey">3</Descriptions.Item>
+            </Descriptions>
+          </PageHeader>
+        </div>
+
+        <div className="dashboard-main-card ">
+          <SurveyResults data={this.state.userData.surveys}></SurveyResults>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default Dashboard;

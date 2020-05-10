@@ -17,9 +17,8 @@ function Body() {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/dashboard/:id">
-          <Dashboard />
-        </Route>
+        <Route path="/dashboard/:id" component={Dashboard}/>
+         
       </Switch>
     </div>
   );
