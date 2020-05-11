@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 
-namespace HelloWorld.Controller
+namespace AudioSurveyApi.Controllers
 {
-    public class FileUploadingController : ApiController
+    public class FileUploadingController : ControllerBase
     {
         [HttpPost]
         [Route("api/FileUploading/UploadFile")]
