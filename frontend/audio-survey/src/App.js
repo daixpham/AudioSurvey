@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Body from "./components/Body";
 import NavBar from "./components/Navbar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import 'antd/dist/antd.css';
 function App() {
   return (

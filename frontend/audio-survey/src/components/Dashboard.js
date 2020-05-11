@@ -4,35 +4,39 @@ import { PlusOutlined } from "@ant-design/icons";
 import SurveyResults from "./SurveyResults";
 
 class Dashboard extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = { userData: null, surveysLength: 0 };
+  constructor(props) {
+    super(props);
+    this.state = {
+      userData: null,
+      surveysLength: 0,
+      userId: this.props.match.params.id,
+    };
   }
-  
 
   //onInit
   componentDidMount() {
-    const id = this.props.match.params.id;
-    fetch("https://localhost:5001/api/users/"+id )
+    fetch("https://localhost:5001/api/users/" + this.state.userId)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        
         this.setState({ userData: data });
         console.log(this.state.userData);
-        
       })
       .catch((error) => console.log(error));
   }
 
-  createNewSurvey() {}
+  createNewSurvey() {
+    // const id = this.props.match.params.id;
+    this.props.history.push("/createsurvey/" + this.state.userId);
+    // routeHistory.push("/createsurvey/" + id);
+  }
 
   render() {
-    
-    if(this.state.userData === null ){ return null}
-   
-    
+    if (this.state.userData === null) {
+      return null;
+    }
+
     return (
       <div>
         <div className="site-page-header-ghost-wrapper">
