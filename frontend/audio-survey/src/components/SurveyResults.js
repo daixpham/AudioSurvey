@@ -13,11 +13,14 @@ class SurveyResults extends React.Component {
   }
 
   onChange(value, data) {
+    if (data[0] === undefined) {
+      return null;
+    }
     this.setState({ selectedSurvey: data[0].survey });
     this.setState({ selected: true });
     this.setState({
-      questions:  data[0].survey.map((question, i) => (
-        <QuestionResult key={i} question={question}/>
+      questions: data[0].survey.map((question, i) => (
+        <QuestionResult key={i} question={question} />
       )),
     });
   }
@@ -48,9 +51,6 @@ class SurveyResults extends React.Component {
       };
     });
 
-   console.log(this.state.questions);
-   
-
     return (
       <div className="container-fluid">
         <Cascader
@@ -70,13 +70,10 @@ class QuestionResult extends React.Component {
     this.state = { question: this.props.question, headers: null };
   }
 
-  
-
   render() {
-    
     return (
       <div className="container-fluid">
-       <p>{this.props.question.questionText}</p>
+        <p>{this.props.question.questionText}</p>
       </div>
     );
   }

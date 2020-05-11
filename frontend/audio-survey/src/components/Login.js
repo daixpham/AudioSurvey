@@ -26,7 +26,6 @@ export default function Login() {
     const data = new FormData(event.target);
     loginData.username = data.get("username");
     loginData.password = data.get("password");
-    console.log(JSON.stringify(loginData));
 
     let authResponse = await fetch("https://localhost:5001/api/users/auth", {
       method: "POST",

@@ -1,5 +1,4 @@
-
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -9,7 +8,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.nav-link > a{
+.nav-link > a {
   text-decoration: none;
   color: white !important;
 }
@@ -19,7 +18,7 @@ code {
 }
 
 :root {
-  --main-bg-color: #40a7ff ;
+  --main-bg-color: #40a7ff;
 }
 
 .navbar {
@@ -53,8 +52,8 @@ code {
 
 .card {
   width: 400px;
-  background-color: #8080801a; 
-  border:none;
+  background-color: #8080801a;
+  border: none;
   -webkit-box-shadow: 4px 3px 41px -4px rgb(230, 229, 229);
   -moz-box-shadow: 4px 3px 41px -4px rgb(230, 229, 229);
   box-shadow: 4px 3px 41px -4px rgb(230, 229, 229);
@@ -67,7 +66,7 @@ code {
   box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
 }
 
-.loadingBackground{
+.loadingBackground {
   opacity: 0.5;
 }
 
@@ -78,17 +77,18 @@ code {
   box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
 }
 
-.dashboard-main-card{
+.dashboard-main-card {
   margin-top: 2rem;
   padding: 1rem;
   width: 100%;
-  min-height: 600px;
+  min-height: 200px;
+  max-height: 100%;
   -webkit-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
   -moz-box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
   box-shadow: 7px 5px 41px -4px rgba(199, 199, 199, 1);
 }
 
-.glow-on-hover{
+.glow-on-hover {
   background-color: lightgrey;
 }
 
@@ -96,6 +96,26 @@ code {
   margin: 0 8px 8px 0;
 }
 
-#components-dropdown-demo-dropdown-button .ant-btn-group-rtl.ant-dropdown-button {
+#components-dropdown-demo-dropdown-button
+  .ant-btn-group-rtl.ant-dropdown-button {
   margin: 0 0 8px 8px;
+}
+
+.steps-content {
+  margin-top: 16px;
+  border: 1px dashed #e9e9e9;
+  border-radius: 2px;
+  background-color: #fafafa;
+  min-height: 100%;
+  text-align: center;
+  
+}
+
+.steps-action {
+  margin-top: 24px;
+}
+
+.createQuestion{
+  max-height: 100%;
+  height: 200px;
 }
