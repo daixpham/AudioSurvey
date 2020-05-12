@@ -68,10 +68,11 @@ class Dashboard extends React.Component {
             </Descriptions>
           </PageHeader>
         </div>
-
-        <div className="dashboard-main-card ">
-          <SurveyResults data={this.state.userData.surveys}></SurveyResults>
-        </div>
+      
+          <div className="dashboard-main-card ">
+            <SurveyResults data={this.state.userData.surveys}></SurveyResults>
+          </div>
+    
       </div>
     );
   }
