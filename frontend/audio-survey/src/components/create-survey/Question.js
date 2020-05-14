@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Modal, Input, Form, Divider, Tag } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
 import SurveyContext from "./SurveyContext";
 const layout = {
   labelCol: {
@@ -17,67 +17,126 @@ const tailLayout = {
     span: 16,
   },
 };
-
+const _answerOptions = [];
 class Question extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { modalVisible: false };
+    this.state = {
+      AudioModalVisible: false,
+      AnswerModalVisible: false,
+      answerButtonVisible: false,
+      answerOptions: [],
+    };
   }
-  showModal = () => {
+  showAddAudioModal = () => {
     this.setState({
-      modalVisible: true,
+      AudioModalVisible: true,
+    });
+  };
+
+  showAddAnswerModal = () => {
+    this.setState({
+      AnswerModalVisible: true,
     });
   };
 
   getAudioList() {
     let list = [];
-    this.context.questions[this.props.number].audios.forEach((element,i) => {
+    this.context.questions[this.props.number].audios.forEach((element, i) => {
       list.push(<Tag key={i}>{element.name}</Tag>);
     });
     return <div>{list}</div>;
   }
 
-  handleOk = (e) => {
-    console.log(e);
-    this.setState({
-      modalVisible: false,
-    });
-  };
+  getAnswerOptions() {
+    let answersOptions = [];
+    let optionsLength = this.state.answerOptions.length;
+    for (let index = 0; index < optionsLength; index++) {
+      answersOptions.push(
+        <Tag key={index}>{this.state.answerOptions[index].answerText}</Tag>
+      );
+    }
+    return <div>{answersOptions}</div>;
+  }
 
-  onFinish = (value) => {
+  audioOnFinish = (value) => {
     let audio = {
       name: value.audioname,
       url: value.url,
-      answers:[]
+      answers: this.state.answerOptions,
     };
     this.context.questions[this.props.number].audios.push(audio);
-    this.setState({ modalVisible: false });
+    this.setState({ AudioModalVisible: false, answerButtonVisible: true });
     console.log(this.context);
   };
-  handleCancel = (e) => {
+
+  answerOnFinish = (value) => {
+    let list = [];
+    let answer = {
+      answerText: value.option,
+      checked: 0,
+    };
+    let audioLength = this.context.questions[this.props.number].audios.length;
+
+    list.push(answer);
+    this.setState({ AnswerModalVisible: false });
+    this.setState({
+      answerOptions: this.state.answerOptions.concat(list),
+    });
+    for (let index = 0; index < audioLength; index++) {
+      this.context.questions[this.props.number].audios[
+        index
+      ].answers = this.state.answerOptions;
+    }
+
+    console.log(this.state.answerOptions);
+
+    console.log(this.context);
+  };
+
+  handleAudioCancel = (e) => {
     console.log(e);
     this.setState({
-      modalVisible: false,
+      AudioModalVisible: false,
+    });
+  };
+  handleAnswerCancel = (e) => {
+    console.log(e);
+    this.setState({
+      AnswerModalVisible: false,
     });
   };
   render() {
     return (
-      <div className="">
-        <p>{this.props.question}</p>
+      <div className="my-3">
+        <h5>{this.props.question}</h5>
         <div className="p-3 float-right">
-          <Button onClick={() => this.showModal()}>
+          <Button onClick={() => this.showAddAudioModal()}>
             <UploadOutlined /> Add Audio
           </Button>
         </div>
-        <div className="float-left p-3">Audios:{this.getAudioList()}</div>
+        {this.state.answerButtonVisible ? (
+          <div className="p-3 float-right">
+            <Button onClick={() => this.showAddAnswerModal()}>
+              <PlusOutlined /> Add Answer Options
+            </Button>
+          </div>
+        ) : null}
+        <div className="float-left text-left">
+          <div className="float-both p-3">Audios:{this.getAudioList()}</div>
+          <div className="float-both p-3">
+            Answers options:{this.getAnswerOptions()}
+          </div>
+        </div>
+
         <Modal
+          key={0}
           title="Add Question"
-          visible={this.state.modalVisible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          visible={this.state.AudioModalVisible}
+          onCancel={this.handleAudioCancel}
           footer={null}
         >
-          <Form {...layout} onFinish={this.onFinish}>
+          <Form {...layout} onFinish={this.audioOnFinish}>
             <Form.Item label="Name" name="audioname">
               <Input />
             </Form.Item>
@@ -91,6 +150,26 @@ class Question extends React.Component {
             </Form.Item>
           </Form>
         </Modal>
+
+        <Modal
+          key={1}
+          title="Add Answer options"
+          visible={this.state.AnswerModalVisible}
+          onCancel={this.handleAnswerCancel}
+          footer={null}
+        >
+          <Form {...layout} onFinish={this.answerOnFinish}>
+            <Form.Item label="Name" name="option">
+              <Input />
+            </Form.Item>
+            <Form.Item {...tailLayout}>
+              <Button type="primary" htmlType="submit">
+                Add
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+
         <Divider />
       </div>
     );

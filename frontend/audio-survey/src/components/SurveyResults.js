@@ -1,14 +1,18 @@
 import React from "react";
-import { Cascader } from "antd";
-
+import { Cascader, Popover, Button, Form, Statistic } from "antd";
+import { ShareAltOutlined } from "@ant-design/icons";
+import QuestionResult from "./result-survey/QuestionResult";
 class SurveyResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       surveys: this.props.data,
       selectedSurvey: [],
+      interviewed: 0,
       selected: false,
       questions: null,
+      surveyName: "",
+      linkToSurvey: "",
     };
   }
 
@@ -16,11 +20,20 @@ class SurveyResults extends React.Component {
     if (data[0] === undefined) {
       return null;
     }
-    this.setState({ selectedSurvey: data[0].survey });
-    this.setState({ selected: true });
+    console.log(data);
+
+    this.setState({
+      selectedSurvey: data[0].survey,
+      selected: true,
+      interviewed: data[0].interviewed,
+      surveyName:value,
+      linkToSurvey:"http://localhost:3000/"+this.props.userId+"/"+value
+    });
+    
+
     this.setState({
       questions: data[0].survey.map((question, i) => (
-        <QuestionResult key={i} question={question} />
+        <QuestionResult radioDisable={true} key={i} question={question} />
       )),
     });
   }
@@ -34,6 +47,7 @@ class SurveyResults extends React.Component {
       value: null,
       label: null,
       survey: null,
+      interviewed: null,
     };
     const options = [];
 
@@ -41,13 +55,14 @@ class SurveyResults extends React.Component {
       item.value = element.surveyname;
       item.label = element.surveyname;
       item.survey = element.questions;
-
+      item.interviewed = element.interviewed;
       options.push(item);
 
       item = {
         value: null,
         label: null,
         survey: null,
+        interviewed: null,
       };
     });
 
@@ -58,24 +73,35 @@ class SurveyResults extends React.Component {
           onChange={this.onChange.bind(this)}
           changeOnSelect
         />
-        <div>{this.state.selected ? this.state.questions : null}</div>
+        <div>
+          <Form>
+            {this.state.selected ? (
+              <div>
+                <div className="row m-3">
+                  <Statistic
+                    className="col-6"
+                    title="The number of people interviewed"
+                    value={this.state.interviewed}
+                  ></Statistic>
+                  <div className="col-6 text-right">
+                    <Popover
+                      placement="top"
+                      title={this.state.surveyName}
+                      content={this.state.linkToSurvey}
+                      trigger="click"
+                    >
+                      <Button><ShareAltOutlined />Link to Survey</Button>
+                    </Popover>
+                  </div>
+                </div>
+                {this.state.questions}
+              </div>
+            ) : null}
+          </Form>
+        </div>
       </div>
     );
   }
 }
 
-class QuestionResult extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { question: this.props.question, headers: null };
-  }
-
-  render() {
-    return (
-      <div className="container-fluid">
-        <p>{this.props.question.questionText}</p>
-      </div>
-    );
-  }
-}
 export default SurveyResults;

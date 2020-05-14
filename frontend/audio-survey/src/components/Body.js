@@ -5,6 +5,7 @@ import Login from "./Login";
 import Home from "./Home";
 import Dashboard from "./Dashboard";
 import CreateSurvey from "./CreateSurvey";
+import Survey from "./result-survey/Survey";
 function Body() {
   return (
     <div className="container-fluid">
@@ -20,6 +21,7 @@ function Body() {
         </Route>
         <Route path="/dashboard/:id" component={Dashboard}/>
         <Route path="/createsurvey/:id" component={CreateSurvey}/>
+        <Route path="/:id/:surveyname" component={Survey}/>
       </Switch>
     </div>
   );

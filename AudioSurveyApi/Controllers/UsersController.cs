@@ -70,9 +70,10 @@ namespace AudioSurveyApi.Controllers
 
             return NoContent();
         }
+        
 
-        [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, User userIn)
+        [HttpPut("{id:length(24)}/{surveyname:length(24)}")]
+        public IActionResult UpdateSurvey(string id, object surveyIn)
         {
             var user = _userService.Get(id);
 
@@ -81,7 +82,7 @@ namespace AudioSurveyApi.Controllers
                 return NotFound();
             }
 
-            _userService.Update(id, userIn);
+            _userService.UpdateSurvey(id, surveyIn);
 
             return NoContent();
         }

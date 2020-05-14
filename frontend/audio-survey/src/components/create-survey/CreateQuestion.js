@@ -46,13 +46,13 @@ class CreateQuestion extends React.Component {
 
   onFinish = (value) => {
     let question = {
-      questiontext: value.question,
+      questionText: value.question,
       audios: [],
     };
     this.context.questions.push(question);
     this.setState({
       questions: this.context.questions.map((question, i) => (
-        <Question key={i} number={i} question={question.questiontext}></Question>
+        <Question key={i} number={i} question={question.questionText}></Question>
       )),
     });
     this.setState({ modalVisible: false });

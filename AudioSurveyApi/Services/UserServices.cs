@@ -35,9 +35,10 @@ namespace AudioSurveyApi.Services
             var builder = Builders<User>.Filter;
             var nameFilter = builder.Eq("Name", userIn.Username);
             var passwordFilter = builder.Eq("Password", userIn.Password);
-            var combineFilter = builder.And(nameFilter,passwordFilter);
-            var user =  _users.Find(combineFilter).FirstOrDefault();
-            if(user.ToJson() != "null"){
+            var combineFilter = builder.And(nameFilter, passwordFilter);
+            var user = _users.Find(combineFilter).FirstOrDefault();
+            if (user.ToJson() != "null")
+            {
                 userId = user.Id;
             }
             Console.WriteLine("result " + userId);
@@ -57,8 +58,13 @@ namespace AudioSurveyApi.Services
             var update = Builders<User>.Update.Push("Surveys", surveyIn);
             _users.UpdateOneAsync(filter, update);
         }
-        public void Update(string id, User userIn) =>
-            _users.ReplaceOne(user => user.Id == id, userIn);
+
+        public void UpdateSurvey(string id, object surveyIn)
+        {
+            var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(id));
+            var update = Builders<User>.Update.Push("Surveys", surveyIn);
+            //_users.UpdateOne();
+        }
 
         public void Remove(User userIn) =>
             _users.DeleteOne(user => user.Id == userIn.Id);

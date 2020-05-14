@@ -33,9 +33,10 @@ class AddAnswer extends React.Component {
 
   onFinish = (value) => {
     let answer = {
-      name: value.option,
+      answerText: value.option,
       checked: 0,
     };
+    // add Key to Tag 
     if (key === 0) {
       list.push(
         <Tag key={0} color="blue">

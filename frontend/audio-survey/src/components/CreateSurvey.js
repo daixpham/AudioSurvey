@@ -1,5 +1,5 @@
 import React from "react";
-import { PageHeader, Steps, Button, message } from "antd";
+import { PageHeader, Steps, Button, message, Popconfirm } from "antd";
 import SetName from "./create-survey/SetName";
 import SurveyContext from "./create-survey/SurveyContext";
 import CreateQuestion from "./create-survey/CreateQuestion";
@@ -22,13 +22,9 @@ const steps = [
     content: "Questions",
   },
   {
-    title: "Add Answer",
-    content: "Answer",
-  },
-  {
     title: "Complete",
-    content: "Test",
-  },
+    content: "Check",
+  }
 ];
 
 class CreateSurvey extends React.Component {
@@ -48,8 +44,8 @@ class CreateSurvey extends React.Component {
   componentWillMount() {
     steps[0].content = <SetName key={0} handler={this.handler}></SetName>;
     steps[1].content = <CreateQuestion key={1}></CreateQuestion>;
-    steps[2].content = <AddAnswer key={2}></AddAnswer>;
-    steps[3].content = <Complete key={3}></Complete>;
+    // steps[2].content = <AddAnswer key={2}></AddAnswer>;
+    steps[2].content = <Complete key={2}></Complete>;
   }
 
   handler() {
@@ -69,26 +65,37 @@ class CreateSurvey extends React.Component {
     this.setState({ current });
   }
 
+  cancel() {
+    Survey = { surveyname: "", questions: [] };
+    this.props.history.push("/dashboard/" + this.state.userId);
+  }
+
   uploadSurvey() {
     fetch(
       "https://localhost:5001/api/users/" + this.state.userId + "/surveyUpdate",
       {
-        method: "POST",
+        method: "PUT",
         mode: "cors",
         headers: {
           Accept: "*/*",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(this.context),
+        body: JSON.stringify(Survey),
       }
     )
       .then((response) => {
         setTimeout(() => {
+          Survey = {
+            surveyname: "",
+            questions: [],
+          };
           // go to Dashboard
-          this.props.history.push("/dashboard"+this.state.userId);
+          this.props.history.push("/dashboard/" + this.state.userId);
         }, 2000);
       })
       .catch((error) => console.log("Unable to add Survey", error));
+
+    console.log(Survey);
   }
 
   render() {
@@ -103,7 +110,7 @@ class CreateSurvey extends React.Component {
               title="Create New Survey"
             ></PageHeader>
           </div>
-          <div className="dashboard-main-card ">
+          <div className="dashboard-main-card col-md-10 offset-md-1 ">
             <Steps current={current}>
               {steps.map((item) => (
                 <Step key={item.title} title={item.title} />
@@ -121,10 +128,7 @@ class CreateSurvey extends React.Component {
                 </Button>
               )}
               {current === steps.length - 1 && (
-                <Button
-                  type="primary"
-                  onClick={() => this.uploadSurvey()}
-                >
+                <Button type="primary" onClick={() => this.uploadSurvey()}>
                   Done
                 </Button>
               )}
@@ -133,6 +137,16 @@ class CreateSurvey extends React.Component {
                   Previous
                 </Button>
               )}
+              <Popconfirm
+                className="float-right"
+                placement="top"
+                title="Are you sure ?"
+                onConfirm={() => this.cancel()}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button danger>Cancel</Button>
+              </Popconfirm>
             </div>
           </div>
         </SurveyContext.Provider>

@@ -79,6 +79,7 @@ code {
 
 .dashboard-main-card {
   margin-top: 2rem;
+  margin-bottom: 2rem;
   padding: 1rem;
   width: 100%;
   min-height: 200px;
@@ -108,19 +109,37 @@ code {
   background-color: #fafafa;
   min-height: 100%;
   text-align: center;
-  
 }
 
 .steps-action {
   margin-top: 24px;
 }
 
-.createQuestion{
+.createQuestion {
   max-height: 100%;
   height: fit-content;
   min-height: 200px;
 }
 
-.questionSurvey{
+.questionSurvey {
   height: fit-content;
+}
+
+.box-shadow {
+  -webkit-box-shadow: 9px 29px 66px -33px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 9px 29px 66px -33px rgba(0, 0, 0, 0.75);
+  box-shadow: 9px 29px 66px -33px rgba(0, 0, 0, 0.75);
+}
+
+.survey-footer {
+  text-align: center;
+  min-height: 50px;
+  padding: 10px;
+  width: 40%;
+}
+
+.audio-player{
+ 
+  max-width: 100%;
+ 
 }
