@@ -48,7 +48,43 @@ class Survey extends React.Component {
   }
 
   onFinish(value) {
-    console.log(value);
+    let result = {
+      audioName: null,
+      answer: null,
+    };
+    let surveyResult = {
+      surveyName: this.state.survey.surveyname,
+      results: [],
+    };
+    let answers = Object.entries(value);
+    for (let index = 0; index < answers.length; index++) {
+      result.audioName = answers[index][0];
+      result.answer = answers[index][1];
+      surveyResult.results.push(result);
+      result = {
+        audioName: null,
+        answer: null,
+      };
+    }
+
+    fetch("https://localhost:5001/api/users/" + this.state.userId+"/survey",{
+        method: "PUT",
+        mode: "cors",
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(surveyResult),
+    })
+    .then((response) => {
+      console.log(response);
+      
+    })
+    .catch((error) => {
+        console.log(error);
+        
+    });
+    console.log(surveyResult);
   }
 
   render() {

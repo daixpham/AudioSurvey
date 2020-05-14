@@ -91,7 +91,7 @@ class CreateSurvey extends React.Component {
           };
           // go to Dashboard
           this.props.history.push("/dashboard/" + this.state.userId);
-        }, 2000);
+        }, 1000);
       })
       .catch((error) => console.log("Unable to add Survey", error));
 

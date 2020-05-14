@@ -72,17 +72,19 @@ namespace AudioSurveyApi.Controllers
         }
         
 
-        [HttpPut("{id:length(24)}/{surveyname:length(24)}")]
-        public IActionResult UpdateSurvey(string id, object surveyIn)
+        [HttpPut("{id:length(24)}/survey")]
+        public IActionResult UpdateSurvey(string id, SurveyResult surveyResultIn)
         {
             var user = _userService.Get(id);
-
+            Console.WriteLine(JsonConvert.SerializeObject(surveyResultIn));
+            Console.WriteLine(id);
+            
             if (user == null)
             {
                 return NotFound();
             }
 
-            _userService.UpdateSurvey(id, surveyIn);
+            _userService.UpdateSurvey(id, surveyResultIn);
 
             return NoContent();
         }

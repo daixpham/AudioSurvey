@@ -59,11 +59,16 @@ namespace AudioSurveyApi.Services
             _users.UpdateOneAsync(filter, update);
         }
 
-        public void UpdateSurvey(string id, object surveyIn)
+        public void UpdateSurvey(string id, SurveyResult surveyResultIn)
         {
-            var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(id));
-            var update = Builders<User>.Update.Push("Surveys", surveyIn);
-            //_users.UpdateOne();
+            var builder = Builders<User>.Filter;
+            var idFilter = builder.Eq("_id", ObjectId.Parse(id));
+            var surveyNameFilter = builder.Eq("Surveys.Surveyname", surveyResultIn.SurveyName);
+            var combineFilter = builder.And(idFilter, surveyNameFilter);
+            var update = Builders<User>.Update.Inc("Surveys.interviewed", 1);
+            _users.UpdateOneAsync(combineFilter, update);
+            
+            
         }
 
         public void Remove(User userIn) =>
