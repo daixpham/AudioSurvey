@@ -2,7 +2,7 @@ import React from "react";
 import { PageHeader, Button, Descriptions } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import SurveyResults from "./SurveyResults";
-
+import NavContext from "../components/NavContext";
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +12,9 @@ class Dashboard extends React.Component {
       userId: this.props.match.params.id,
     };
   }
-
+  componentWillMount() {
+    this.context = false
+  }
   //onInit
   componentDidMount() {
     fetch("https://localhost:5001/api/users/" + this.state.userId)
@@ -21,6 +23,8 @@ class Dashboard extends React.Component {
       })
       .then((data) => {
         this.setState({ userData: data });
+        this.context = false
+        
         console.log(this.state.userData);
       })
       .catch((error) => console.log(error));
@@ -68,14 +72,16 @@ class Dashboard extends React.Component {
             </Descriptions>
           </PageHeader>
         </div>
-        
-          <div className="dashboard-main-card ">
-            <SurveyResults userId={this.state.userId} data={this.state.userData.surveys}></SurveyResults>
-          </div>
-         
+
+        <div className="dashboard-main-card ">
+          <SurveyResults
+            userId={this.state.userId}
+            data={this.state.userData.surveys}
+          ></SurveyResults>
+        </div>
       </div>
     );
   }
 }
-
+Dashboard.contextType = NavContext;
 export default Dashboard;

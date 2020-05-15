@@ -39,10 +39,10 @@ export default function SignUp() {
       body: JSON.stringify(signUpData),
     })
       .then((response) => {
-        setTimeout(() => {
-          // go to Login
-          routeHistory.push("/login");
-        }, 2000);
+        return response.json();
+      }).then((data)=>{
+        console.log(data);
+        routeHistory.push("/dashboard/"+data.id);
       })
       .catch((error) => console.log("Unable to add User", error));
   }

@@ -45,6 +45,7 @@ export default function Login() {
           setLoading(false);
         } else {
           //go to Dashboard Page
+          
           routeHistory.push("/dashboard/" + value);
         }
       })

@@ -19,7 +19,7 @@ function Body() {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/dashboard/:id" component={Dashboard}/>
+        <Route path="/dashboard/:id"  component={Dashboard}/>
         <Route path="/createsurvey/:id" component={CreateSurvey}/>
         <Route path="/:id/:surveyname" component={Survey}/>
       </Switch>

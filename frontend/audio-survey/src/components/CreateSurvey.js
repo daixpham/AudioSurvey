@@ -24,7 +24,7 @@ const steps = [
   {
     title: "Complete",
     content: "Check",
-  }
+  },
 ];
 
 class CreateSurvey extends React.Component {
@@ -43,17 +43,28 @@ class CreateSurvey extends React.Component {
 
   componentWillMount() {
     steps[0].content = <SetName key={0} handler={this.handler}></SetName>;
-    steps[1].content = <CreateQuestion key={1}></CreateQuestion>;
+    steps[1].content = <CreateQuestion handler={this.handler} key={1}></CreateQuestion>;
     // steps[2].content = <AddAnswer key={2}></AddAnswer>;
     steps[2].content = <Complete key={2}></Complete>;
   }
 
   handler() {
-    if (Survey.surveyname === "") {
+    console.log(this.state.current);
+
+    if (Survey.surveyname === "" || this.state.current === 0) {
       this.setState({ nextButtonDisable: true });
     } else {
       this.setState({ nextButtonDisable: false });
     }
+
+    if (Survey.questions.length <= 0 && this.state.current === 1) {
+      this.setState({ nextButtonDisable: true });
+    } else {
+      this.setState({ nextButtonDisable: false });
+    }
+
+    console.log("call");
+    
   }
   next() {
     const current = this.state.current + 1;

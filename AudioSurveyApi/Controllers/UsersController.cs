@@ -53,7 +53,7 @@ namespace AudioSurveyApi.Controllers
         {
 
             _userService.Create(user);
-
+            Console.WriteLine("Create User ID "+user.Id);
             return CreatedAtRoute("GetUser", new { id = user.Id }, user);
         }
 

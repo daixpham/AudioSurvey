@@ -1,5 +1,5 @@
 import React from "react";
-import { List, Form, Card, Radio } from "antd";
+import { Form, Card, Radio } from "antd";
 import { PlaySquareOutlined } from "@ant-design/icons";
 
 class QuestionResult extends React.Component {
@@ -50,33 +50,6 @@ class QuestionResult extends React.Component {
             </Radio.Group>
           </Card>
         </Form.Item>
-
-        // <List
-        //   key={i}
-        //   size="small"
-        //   itemLayout="horizontal"
-        //   className="m-3"
-        //   grid={{ gutter: 16, column: 1 }}
-        //   header={
-        //     <div>
-        //
-        //       {element.name}
-        //     </div>
-        //   }
-
-        //   bordered
-        //   dataSource={element.answers}
-        //   renderItem={(item) => (
-        //     <List.Item>
-        //       <Form.Item name="radio-group" label="Radio.Group">
-        //         <Radio value={1} disabled={this.props.radioDisable}>
-        //           {item.answerText}
-        //         </Radio>
-        //
-        //       </Form.Item>
-        //     </List.Item>
-        //   )}
-        // />
       );
     });
     return list;

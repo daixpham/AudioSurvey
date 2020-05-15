@@ -1,13 +1,7 @@
 import React from "react";
-import {
-  PageHeader,
-  Button,
-  Modal,
-  Input,
-  Form
-} from "antd";
+import { PageHeader, Button, Modal, Input, Form } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import Question from "./Question"
+import Question from "./Question";
 import SurveyContext from "./SurveyContext";
 
 const layout = {
@@ -31,6 +25,10 @@ class CreateQuestion extends React.Component {
     this.state = { modalVisible: false, questions: [] };
   }
 
+  componentDidMount() {
+    this.props.handler();
+  }
+
   showModal = () => {
     this.setState({
       modalVisible: true,
@@ -52,11 +50,16 @@ class CreateQuestion extends React.Component {
     this.context.questions.push(question);
     this.setState({
       questions: this.context.questions.map((question, i) => (
-        <Question key={i} number={i} question={question.questionText}></Question>
+        <Question
+          key={i}
+          number={i}
+          question={question.questionText}
+          handler={this.props.handler}
+        ></Question>
       )),
     });
     this.setState({ modalVisible: false });
-    console.log(this.context);
+    this.props.handler();
   };
   handleCancel = (e) => {
     console.log(e);
@@ -92,7 +95,7 @@ class CreateQuestion extends React.Component {
               <Input />
             </Form.Item>
             <Form.Item {...tailLayout}>
-              <Button  type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit">
                 Add
               </Button>
             </Form.Item>
@@ -102,8 +105,6 @@ class CreateQuestion extends React.Component {
     );
   }
 }
-
-
 
 CreateQuestion.contextType = SurveyContext;
 export default CreateQuestion;

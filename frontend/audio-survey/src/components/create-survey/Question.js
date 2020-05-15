@@ -17,7 +17,7 @@ const tailLayout = {
     span: 16,
   },
 };
-const _answerOptions = [];
+
 class Question extends React.Component {
   constructor(props) {
     super(props);
@@ -28,6 +28,11 @@ class Question extends React.Component {
       answerOptions: [],
     };
   }
+
+  componentDidMount(){
+    this.props.handler();
+  }
+
   showAddAudioModal = () => {
     this.setState({
       AudioModalVisible: true,
@@ -67,6 +72,7 @@ class Question extends React.Component {
     };
     this.context.questions[this.props.number].audios.push(audio);
     this.setState({ AudioModalVisible: false, answerButtonVisible: true });
+    
     console.log(this.context);
   };
 

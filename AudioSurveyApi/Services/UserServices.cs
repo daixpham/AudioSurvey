@@ -49,6 +49,8 @@ namespace AudioSurveyApi.Services
         {
             Console.WriteLine("Insert " + user.ToJson());
             _users.InsertOne(user);
+            
+            
             return user;
         }
 
