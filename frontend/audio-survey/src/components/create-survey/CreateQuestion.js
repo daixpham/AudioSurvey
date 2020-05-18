@@ -36,7 +36,6 @@ class CreateQuestion extends React.Component {
   };
 
   handleOk = (e) => {
-    console.log(e);
     this.setState({
       modalVisible: false,
     });
@@ -62,7 +61,6 @@ class CreateQuestion extends React.Component {
     this.props.handler();
   };
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       modalVisible: false,
     });

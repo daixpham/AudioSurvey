@@ -29,7 +29,7 @@ class Question extends React.Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.handler();
   }
 
@@ -72,8 +72,6 @@ class Question extends React.Component {
     };
     this.context.questions[this.props.number].audios.push(audio);
     this.setState({ AudioModalVisible: false, answerButtonVisible: true });
-    
-    console.log(this.context);
   };
 
   answerOnFinish = (value) => {
@@ -94,20 +92,14 @@ class Question extends React.Component {
         index
       ].answers = this.state.answerOptions;
     }
-
-    console.log(this.state.answerOptions);
-
-    console.log(this.context);
   };
 
   handleAudioCancel = (e) => {
-    console.log(e);
     this.setState({
       AudioModalVisible: false,
     });
   };
   handleAnswerCancel = (e) => {
-    console.log(e);
     this.setState({
       AnswerModalVisible: false,
     });
@@ -137,7 +129,7 @@ class Question extends React.Component {
 
         <Modal
           key={0}
-          title="Add Question"
+          title="Add Audio"
           visible={this.state.AudioModalVisible}
           onCancel={this.handleAudioCancel}
           footer={null}

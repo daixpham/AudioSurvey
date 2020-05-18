@@ -4,9 +4,7 @@ import SurveyContext from "./SurveyContext";
 
 class SetName extends React.Component {
   setName(evt) {
-
-    this.context.surveyname = evt.target.value
-    console.log(this.context);
+    this.context.surveyname = evt.target.value;
     this.props.handler();
   }
   render() {

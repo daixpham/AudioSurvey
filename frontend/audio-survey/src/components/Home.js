@@ -5,10 +5,7 @@ class Home extends React.Component {
     super(props);
   }
 
-  componentDidMount(){
-      console.log(this.context);
-      
-  }
+
   render() {
     this.context = true
     return <div>Home</div>;

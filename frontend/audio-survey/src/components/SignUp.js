@@ -41,7 +41,7 @@ export default function SignUp() {
       .then((response) => {
         return response.json();
       }).then((data)=>{
-        console.log(data);
+
         routeHistory.push("/dashboard/"+data.id);
       })
       .catch((error) => console.log("Unable to add User", error));

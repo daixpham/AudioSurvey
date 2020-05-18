@@ -49,7 +49,7 @@ class CreateSurvey extends React.Component {
   }
 
   handler() {
-    console.log(this.state.current);
+  
 
     if (Survey.surveyname === "" || this.state.current === 0) {
       this.setState({ nextButtonDisable: true });
@@ -63,7 +63,6 @@ class CreateSurvey extends React.Component {
       this.setState({ nextButtonDisable: false });
     }
 
-    console.log("call");
     
   }
   next() {
@@ -106,7 +105,6 @@ class CreateSurvey extends React.Component {
       })
       .catch((error) => console.log("Unable to add Survey", error));
 
-    console.log(Survey);
   }
 
   render() {

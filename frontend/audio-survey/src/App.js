@@ -6,10 +6,7 @@ import "antd/dist/antd.css";
 import NavContext from "./components/NavContext"
 const loginStatus = true;
 class App extends React.Component {
-  componentWillMount(){
-    console.log("App updated");
-    
-  }
+
 
   changeNav(){
 

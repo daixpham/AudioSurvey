@@ -20,8 +20,6 @@ class SurveyResults extends React.Component {
     if (data[0] === undefined) {
       return null;
     }
-    console.log(data);
-
     this.setState({
       selectedSurvey: data[0].survey,
       selected: true,

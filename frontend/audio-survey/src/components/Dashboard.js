@@ -24,8 +24,6 @@ class Dashboard extends React.Component {
       .then((data) => {
         this.setState({ userData: data });
         this.context = false
-        
-        console.log(this.state.userData);
       })
       .catch((error) => console.log(error));
   }

@@ -64,7 +64,6 @@ class AddAnswer extends React.Component {
       }
     }
     this.setState({ modalVisible: false });
-    console.log(this.context);
   };
 
   handleCancel = (e) => {

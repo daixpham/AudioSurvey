@@ -41,7 +41,6 @@ namespace AudioSurveyApi.Services
             {
                 userId = user.Id;
             }
-            Console.WriteLine("result " + userId);
             return userId;
         }
 
@@ -49,8 +48,6 @@ namespace AudioSurveyApi.Services
         {
             Console.WriteLine("Insert " + user.ToJson());
             _users.InsertOne(user);
-            
-            
             return user;
         }
 
@@ -67,10 +64,8 @@ namespace AudioSurveyApi.Services
             var idFilter = builder.Eq("_id", ObjectId.Parse(id));
             var surveyNameFilter = builder.Eq("Surveys.Surveyname", surveyResultIn.SurveyName);
             var combineFilter = builder.And(idFilter, surveyNameFilter);
-            var update = Builders<User>.Update.Inc("Surveys.interviewed", 1);
-            _users.UpdateOneAsync(combineFilter, update);
-            
-            
+            var update = Builders<User>.Update.Inc("Surveys.$.interviewed", 1);
+            _users.UpdateOne(combineFilter, update);
         }
 
         public void Remove(User userIn) =>

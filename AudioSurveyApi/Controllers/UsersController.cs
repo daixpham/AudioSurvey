@@ -38,13 +38,15 @@ namespace AudioSurveyApi.Controllers
 
             return user;
         }
-       
+
         [HttpPost("auth", Name = "GetUserAuth")]
         public ActionResult<String> UserAuth(User user)
         {
-
             var userId = _userService.GetUserAuthStatus(user);
-
+            if (userId == null)
+            {
+                return NotFound();
+            }
             return userId;
         }
 
@@ -53,7 +55,6 @@ namespace AudioSurveyApi.Controllers
         {
 
             _userService.Create(user);
-            Console.WriteLine("Create User ID "+user.Id);
             return CreatedAtRoute("GetUser", new { id = user.Id }, user);
         }
 
@@ -70,14 +71,12 @@ namespace AudioSurveyApi.Controllers
 
             return NoContent();
         }
-        
 
-        [HttpPut("{id:length(24)}/survey")]
+
+        [HttpPut("{id:length(24)}/surveyResultUpdate")]
         public IActionResult UpdateSurvey(string id, SurveyResult surveyResultIn)
         {
             var user = _userService.Get(id);
-            Console.WriteLine(JsonConvert.SerializeObject(surveyResultIn));
-            Console.WriteLine(id);
             
             if (user == null)
             {

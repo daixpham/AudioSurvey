@@ -1,6 +1,6 @@
 import React from "react";
 import { Affix, Form, Button, PageHeader, Result } from "antd";
-
+import { SmileOutlined } from "@ant-design/icons";
 import QuestionResult from "./QuestionResult";
 class Survey extends React.Component {
   constructor(props) {
@@ -9,6 +9,7 @@ class Survey extends React.Component {
       userId: this.props.match.params.id,
       survey: null,
       siteNotFound: false,
+      surveyDone: false,
     };
   }
 
@@ -18,7 +19,6 @@ class Survey extends React.Component {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         let _survey = data.surveys.find(
           (element) => element.surveyname === this.props.match.params.surveyname
         );
@@ -29,7 +29,6 @@ class Survey extends React.Component {
         this.setState({ survey: _survey });
       })
       .catch((error) => {
-        console.log(error);
         this.setState({ siteNotFound: true });
       });
   }
@@ -67,7 +66,11 @@ class Survey extends React.Component {
       };
     }
 
-    fetch("https://localhost:5001/api/users/" + this.state.userId+"/survey",{
+    fetch(
+      "https://localhost:5001/api/users/" +
+        this.state.userId +
+        "/surveyResultUpdate",
+      {
         method: "PUT",
         mode: "cors",
         headers: {
@@ -75,20 +78,17 @@ class Survey extends React.Component {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(surveyResult),
-    })
-    .then((response) => {
-      console.log(response);
-      
-    })
-    .catch((error) => {
+      }
+    )
+      .then((response) => {
+        this.setState({ surveyDone: true });
+      })
+      .catch((error) => {
         console.log(error);
-        
-    });
-    console.log(surveyResult);
+      });
   }
 
   render() {
-    console.log(this.state.survey);
     if (this.state.survey === null || this.state.siteNotFound) {
       return (
         <Result
@@ -101,29 +101,38 @@ class Survey extends React.Component {
 
     return (
       <div className="container-fluid ">
-        <div className="site-page-header-ghost-wrapper">
-          <PageHeader
-            ghost={false}
-            title={"Survey: " + this.state.survey.surveyname}
-          ></PageHeader>
-        </div>
-
-        <Form onFinish={(value) => this.onFinish(value)}>
-          {this.getQuestions()}
-          <div className="row justify-content-center" offsetBottom={5}>
-            <Form.Item className="survey-footer col-lg-2 col-md-4 col-sm-8 box-shadow">
-              <Button
-                shape="round"
-                type="primary"
-                block
-                size="large"
-                htmlType="submit"
-              >
-                Submit
-              </Button>
-            </Form.Item>
+        {!this.state.surveyDone ? (
+          <div>
+            <div className="site-page-header-ghost-wrapper">
+              <PageHeader
+                ghost={false}
+                title={"Survey: " + this.state.survey.surveyname}
+              ></PageHeader>
+            </div>
+            <Form onFinish={(value) => this.onFinish(value)}>
+              {this.getQuestions()}
+              <div className="row justify-content-center" offsetBottom={5}>
+                <Form.Item className="survey-footer col-lg-2 col-md-4 col-sm-8 box-shadow">
+                  <Button
+                    shape="round"
+                    type="primary"
+                    block
+                    size="large"
+                    htmlType="submit"
+                  >
+                    Submit
+                  </Button>
+                </Form.Item>
+              </div>
+            </Form>
           </div>
-        </Form>
+        ) : (
+          <Result
+            icon={<SmileOutlined />}
+            title="Great, we have done all the operations!"
+            extra={<Button type="primary">Bye!</Button>}
+          />
+        )}
       </div>
     );
   }
