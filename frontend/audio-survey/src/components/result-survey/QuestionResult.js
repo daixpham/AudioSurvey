@@ -58,12 +58,14 @@ class QuestionResult extends React.Component {
   render() {
     return (
       <div>
+        <Form.Item name={this.props.question.questionText}>
         <Card
           className="text-left font-weight-bold m-3 box-shadow"
           title={this.props.question.questionText}
         >
           {this.getAudioList(this.props.question.audios)}
         </Card>
+        </Form.Item>
       </div>
     );
   }

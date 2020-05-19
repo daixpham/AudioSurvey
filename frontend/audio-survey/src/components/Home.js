@@ -7,9 +7,7 @@ class Home extends React.Component {
 
 
   render() {
-    this.context = true
     return <div>Home</div>;
   }
 }
-Home.contextType = NavContext;
 export default Home;

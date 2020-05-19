@@ -3,24 +3,14 @@ import Body from "./components/Body";
 import NavBar from "./components/Navbar";
 import { BrowserRouter as Router } from "react-router-dom";
 import "antd/dist/antd.css";
-import NavContext from "./components/NavContext"
 const loginStatus = true;
 class App extends React.Component {
 
-
-  changeNav(){
-
-  }
   render() {
-    
-    
     return (
       <div className="">
         <Router>
-          <NavContext.Provider value={loginStatus}>
-            <NavBar></NavBar>
-            <Body view={this.changeNav.bind(this)}></Body>
-          </NavContext.Provider>
+          <Body></Body>
         </Router>
       </div>
     );

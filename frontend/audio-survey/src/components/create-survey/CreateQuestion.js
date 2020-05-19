@@ -22,7 +22,7 @@ const tailLayout = {
 class CreateQuestion extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { modalVisible: false, questions: [] };
+    this.state = { modalVisible: false, questions: [], input:null };
   }
 
   componentDidMount() {
@@ -90,7 +90,7 @@ class CreateQuestion extends React.Component {
         >
           <Form {...layout} onFinish={this.onFinish}>
             <Form.Item label="Question" name="question">
-              <Input />
+              <Input/>
             </Form.Item>
             <Form.Item {...tailLayout}>
               <Button type="primary" htmlType="submit">

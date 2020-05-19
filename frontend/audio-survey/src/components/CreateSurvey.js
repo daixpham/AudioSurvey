@@ -5,6 +5,7 @@ import SurveyContext from "./create-survey/SurveyContext";
 import CreateQuestion from "./create-survey/CreateQuestion";
 import AddAnswer from "./create-survey/AddAnswer";
 import Complete from "./create-survey/Complete";
+import NavBar from "./Navbar";
 
 const { Step } = Steps;
 let Survey = {
@@ -43,14 +44,14 @@ class CreateSurvey extends React.Component {
 
   componentWillMount() {
     steps[0].content = <SetName key={0} handler={this.handler}></SetName>;
-    steps[1].content = <CreateQuestion handler={this.handler} key={1}></CreateQuestion>;
+    steps[1].content = (
+      <CreateQuestion handler={this.handler} key={1}></CreateQuestion>
+    );
     // steps[2].content = <AddAnswer key={2}></AddAnswer>;
     steps[2].content = <Complete key={2}></Complete>;
   }
 
   handler() {
-  
-
     if (Survey.surveyname === "" || this.state.current === 0) {
       this.setState({ nextButtonDisable: true });
     } else {
@@ -62,8 +63,6 @@ class CreateSurvey extends React.Component {
     } else {
       this.setState({ nextButtonDisable: false });
     }
-
-    
   }
   next() {
     const current = this.state.current + 1;
@@ -104,13 +103,13 @@ class CreateSurvey extends React.Component {
         }, 1000);
       })
       .catch((error) => console.log("Unable to add Survey", error));
-
   }
 
   render() {
     const { current } = this.state;
     return (
       <div>
+        <NavBar loginStatus={true}></NavBar>
         <SurveyContext.Provider value={Survey}>
           <div className="site-page-header-ghost-wrapper">
             <PageHeader

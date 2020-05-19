@@ -83,7 +83,7 @@ namespace AudioSurveyApi.Controllers
                 return NotFound();
             }
 
-            _userService.UpdateSurvey(id, surveyResultIn);
+            _userService.UpdateSurveyResult(id, surveyResultIn);
 
             return NoContent();
         }

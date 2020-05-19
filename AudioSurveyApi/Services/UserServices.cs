@@ -58,7 +58,7 @@ namespace AudioSurveyApi.Services
             _users.UpdateOneAsync(filter, update);
         }
 
-        public void UpdateSurvey(string id, SurveyResult surveyResultIn)
+        public void UpdateSurveyResult(string id, SurveyResult surveyResultIn)
         {
             var builder = Builders<User>.Filter;
             var idFilter = builder.Eq("_id", ObjectId.Parse(id));
@@ -66,6 +66,39 @@ namespace AudioSurveyApi.Services
             var combineFilter = builder.And(idFilter, surveyNameFilter);
             var update = Builders<User>.Update.Inc("Surveys.$.interviewed", 1);
             _users.UpdateOne(combineFilter, update);
+            var user = _users.Find(combineFilter).FirstOrDefault();
+            Console.WriteLine(user.ToJson());
+
+            // O(r*s*q*a*an)
+
+            for (int r = 0; r < surveyResultIn.Results.Length; r++)
+            {
+                for (int s = 0; s < user.Surveys.Length; s++)
+                {
+                    if (user.Surveys[s].Surveyname == surveyResultIn.SurveyName)
+                    {
+                        for (int q = 0; q < user.Surveys[s].Questions.Length; q++)
+                        {
+                            for (int a = 0; a < user.Surveys[s].Questions[q].Audios.Length; a++)
+                            {
+                                if (user.Surveys[s].Questions[q].Audios[a].Name == surveyResultIn.Results[r].AudioName)
+                                {
+                                    for (int an = 0; an < user.Surveys[s].Questions[q].Audios[a].Answers.Length; an++)
+                                    {
+                                        if (user.Surveys[s].Questions[q].Audios[a].Answers[an].AnswerText == surveyResultIn.Results[r].Answer)
+                                        {
+                                            update = Builders<User>.Update.Inc("Surveys."+s+".Questions."+q+".Audios."+a+".Answers."+an+".Checked", 1);
+                                             _users.UpdateOne(combineFilter, update);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
         }
 
         public void Remove(User userIn) =>

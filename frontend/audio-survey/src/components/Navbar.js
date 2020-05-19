@@ -1,11 +1,10 @@
 import React from "react";
 import { HomeOutlined } from "@ant-design/icons";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import NavContext from "./NavContext";
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loginStatus: this.context };
+    this.state = { loginStatus: this.props.loginStatus};
   }
  
 
@@ -17,7 +16,7 @@ class NavBar extends React.Component {
         <nav className="navbar navbar-light bg-light">
           <a className="navbar-brand" href="/">
             <img
-              src="./graphic_eq-24px.svg"
+              src="/graphic_eq-24px.svg"
               width="30"
               height="30"
               className="d-inline-block align-top"
@@ -37,7 +36,7 @@ class NavBar extends React.Component {
             <HomeOutlined />
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-            {this.state.loginStatus ? (
+            {!this.state.loginStatus ? (
               <ul className="navbar-nav float-right mr-auto mt-2 mt-lg-0">
                 <li className="nav-item">
                   <div className="nav-link" href="#">
@@ -54,7 +53,7 @@ class NavBar extends React.Component {
               <ul className="navbar-nav float-right mr-auto mt-2 mt-lg-0">
                 <li className="nav-item">
                   <div className="nav-link" href="#">
-                    <Link onClick={()=> this.setState({loginStatus:this.context})} to="/">Logout</Link>
+                    <Link  to="/">Logout</Link>
                   </div>
                 </li>
               </ul>
@@ -65,5 +64,5 @@ class NavBar extends React.Component {
     );
   }
 }
-NavBar.contextType = NavContext;
+
 export default NavBar;

@@ -66,6 +66,8 @@ class Survey extends React.Component {
       };
     }
 
+    console.log(value);
+
     fetch(
       "https://localhost:5001/api/users/" +
         this.state.userId +

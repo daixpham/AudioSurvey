@@ -78,7 +78,7 @@ class SurveyResults extends React.Component {
                 <div className="row m-3">
                   <Statistic
                     className="col-6"
-                    title="The number of people interviewed"
+                    title="Number of participants"
                     value={this.state.interviewed}
                   ></Statistic>
                   <div className="col-6 text-right">
