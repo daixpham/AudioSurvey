@@ -1,6 +1,7 @@
 import React from "react";
 import { HomeOutlined } from "@ant-design/icons";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import AuthContext from "./AuthContext";
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
@@ -53,7 +54,7 @@ class NavBar extends React.Component {
               <ul className="navbar-nav float-right mr-auto mt-2 mt-lg-0">
                 <li className="nav-item">
                   <div className="nav-link" href="#">
-                    <Link  to="/">Logout</Link>
+                    <Link onClick={ () => {AuthContext._currentValue = false}} to="/">Logout</Link>
                   </div>
                 </li>
               </ul>

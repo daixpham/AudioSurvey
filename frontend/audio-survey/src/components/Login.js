@@ -5,8 +5,11 @@ import {
   Link,
   useHistory,
 } from "react-router-dom";
-
+import AuthContext from "./AuthContext";
 import { Spin } from "antd";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 export default function Login() {
   const [alert, setAlert] = useState(false);
@@ -21,7 +24,6 @@ export default function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
-
     //Get form data
     const data = new FormData(event.target);
     loginData.username = data.get("username");
@@ -45,7 +47,8 @@ export default function Login() {
           setLoading(false);
         } else {
           //go to Dashboard Page
-          
+          cookies.set("authStatus", true, { path: '/', path:'/dashboard' })
+          AuthContext._currentValue = true;
           routeHistory.push("/dashboard/" + value);
         }
       })
@@ -90,6 +93,7 @@ export default function Login() {
     </div>
   );
 }
+
 
 function AlertDiv(props) {
   return (

@@ -1,46 +1,64 @@
 import React from "react";
-import { PageHeader, Button, Descriptions } from "antd";
+import { PageHeader, Button, Descriptions, Result } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import SurveyResults from "./SurveyResults";
-
+import Cookies from "universal-cookie";
 import NavBar from "./Navbar";
+import AuthContext from "./AuthContext";
+import { Link } from "react-router-dom";
+
+const cookies = new Cookies();
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userData: null,
       surveysLength: 0,
+      authContext: null,
       userId: this.props.match.params.id,
     };
   }
 
   //onInit
   componentDidMount() {
+    console.log(cookies);
+
     fetch("https://localhost:5001/api/users/" + this.state.userId)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
+        this.setState({ authContext: AuthContext._currentValue });
+        console.log(this.state.authContext);
         this.setState({ userData: data });
-      
       })
       .catch((error) => console.log(error));
   }
 
   createNewSurvey() {
-    // const id = this.props.match.params.id;
     this.props.history.push("/createsurvey/" + this.state.userId);
-    // routeHistory.push("/createsurvey/" + id);
   }
 
   render() {
     if (this.state.userData === null) {
       return null;
     }
+    let authStatus = cookies.get("authStatus");
 
+    if (this.state.authContext === false) {
+      return (
+        <Result
+          status="403"
+          title="403"
+          subTitle="Sorry, you are not authorized to access this page."
+          extra={<Button type="primary"><Link to="/login">Back Home</Link></Button>}
+        />
+      );
+    }
     return (
       <div>
-        <NavBar  loginStatus={true}></NavBar>
+        <NavBar loginStatus={true}></NavBar>
         <div className="site-page-header-ghost-wrapper">
           <PageHeader
             ghost={false}
@@ -82,4 +100,5 @@ class Dashboard extends React.Component {
   }
 }
 
+Dashboard.contextType = AuthContext;
 export default Dashboard;

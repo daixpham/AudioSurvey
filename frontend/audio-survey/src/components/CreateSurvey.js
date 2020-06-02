@@ -1,12 +1,11 @@
 import React from "react";
-import { PageHeader, Steps, Button, message, Popconfirm } from "antd";
+import { PageHeader, Steps, Button, message, Popconfirm, Result } from "antd";
 import SetName from "./create-survey/SetName";
 import SurveyContext from "./create-survey/SurveyContext";
 import CreateQuestion from "./create-survey/CreateQuestion";
-import AddAnswer from "./create-survey/AddAnswer";
 import Complete from "./create-survey/Complete";
 import NavBar from "./Navbar";
-
+import AuthContext from "./AuthContext";
 const { Step } = Steps;
 let Survey = {
   surveyname: "",
@@ -47,7 +46,6 @@ class CreateSurvey extends React.Component {
     steps[1].content = (
       <CreateQuestion handler={this.handler} key={1}></CreateQuestion>
     );
-    // steps[2].content = <AddAnswer key={2}></AddAnswer>;
     steps[2].content = <Complete key={2}></Complete>;
   }
 
@@ -107,6 +105,15 @@ class CreateSurvey extends React.Component {
 
   render() {
     const { current } = this.state;
+    if(AuthContext._currentValue === false){
+      return (
+        <Result
+         
+          title="Great, we have done all the operations!"
+          extra={<Button type="primary">Bye!</Button>}
+        />
+      );
+    }
     return (
       <div>
         <NavBar loginStatus={true}></NavBar>

@@ -4,9 +4,9 @@ using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using MongoDB.Bson.Serialization;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Cryptography;
 namespace AudioSurveyApi.Services
 {
     public class UserServices
@@ -32,11 +32,32 @@ namespace AudioSurveyApi.Services
         public String GetUserAuthStatus(User userIn)
         {
             string userId = "";
+            string savedPasswordHash = "";
+            Console.WriteLine("Insert " + userIn.Password);
+
+
             var builder = Builders<User>.Filter;
             var nameFilter = builder.Eq("Name", userIn.Username);
-            var passwordFilter = builder.Eq("Password", userIn.Password);
-            var combineFilter = builder.And(nameFilter, passwordFilter);
-            var user = _users.Find(combineFilter).FirstOrDefault();
+            var user = _users.Find(nameFilter).FirstOrDefault();
+            if (user == null)
+            {
+                return userId;
+            }
+            savedPasswordHash = user.Password;
+            byte[] hashBytes = Convert.FromBase64String(savedPasswordHash);
+            byte[] salt = new byte[128 / 8];
+            Array.Copy(hashBytes, 0, salt, 0, 16);
+            var pbkdf2 = new Rfc2898DeriveBytes(userIn.Password, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+
+            for (int i = 0; i < 20; i++)
+            {
+                if (hashBytes[i + 16] != hash[i])
+                {
+                    return userId;
+                }
+            }
+
             if (user.ToJson() != "null")
             {
                 userId = user.Id;
@@ -46,7 +67,19 @@ namespace AudioSurveyApi.Services
 
         public User Create(User user)
         {
-            Console.WriteLine("Insert " + user.ToJson());
+            Console.WriteLine("Insert " + user.Password);
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            var pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+
+
+            user.Password = Convert.ToBase64String(hashBytes);
+            Console.WriteLine("Hash: " + user.Password);
             _users.InsertOne(user);
             return user;
         }
@@ -67,9 +100,8 @@ namespace AudioSurveyApi.Services
             var update = Builders<User>.Update.Inc("Surveys.$.interviewed", 1);
             _users.UpdateOne(combineFilter, update);
             var user = _users.Find(combineFilter).FirstOrDefault();
-            Console.WriteLine(user.ToJson());
 
-            // O(r*s*q*a*an)
+            // O(r*s*q*a*an) very bad 
 
             for (int r = 0; r < surveyResultIn.Results.Length; r++)
             {
@@ -87,8 +119,8 @@ namespace AudioSurveyApi.Services
                                     {
                                         if (user.Surveys[s].Questions[q].Audios[a].Answers[an].AnswerText == surveyResultIn.Results[r].Answer)
                                         {
-                                            update = Builders<User>.Update.Inc("Surveys."+s+".Questions."+q+".Audios."+a+".Answers."+an+".Checked", 1);
-                                             _users.UpdateOne(combineFilter, update);
+                                            update = Builders<User>.Update.Inc("Surveys." + s + ".Questions." + q + ".Audios." + a + ".Answers." + an + ".Checked", 1);
+                                            _users.UpdateOne(combineFilter, update);
                                         }
                                     }
                                 }
@@ -97,7 +129,6 @@ namespace AudioSurveyApi.Services
                     }
                 }
             }
-
 
         }
 
