@@ -16,22 +16,22 @@ class Dashboard extends React.Component {
       userData: null,
       surveysLength: 0,
       authContext: null,
+      authToken: null,
       userId: this.props.match.params.id,
     };
   }
 
   //onInit
   componentDidMount() {
-    console.log(cookies);
-
+    
     fetch("https://localhost:5001/api/users/" + this.state.userId)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
         this.setState({ authContext: AuthContext._currentValue });
-        console.log(this.state.authContext);
-        this.setState({ userData: data });
+        console.log(data);
+        this.setState({ userData: data, authToken:data.authToken });
       })
       .catch((error) => console.log(error));
   }
@@ -44,9 +44,10 @@ class Dashboard extends React.Component {
     if (this.state.userData === null) {
       return null;
     }
-    let authStatus = cookies.get("authStatus");
-
-    if (this.state.authContext === false) {
+    let authToken = cookies.get("authToken",{path: "/"});
+    
+    
+    if (this.state.authToken != authToken) {
       return (
         <Result
           status="403"
@@ -56,6 +57,7 @@ class Dashboard extends React.Component {
         />
       );
     }
+
     return (
       <div>
         <NavBar loginStatus={true}></NavBar>

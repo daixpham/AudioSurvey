@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System.Security.Cryptography;
 namespace AudioSurveyApi.Services
 {
     public class UserServices
@@ -15,6 +13,7 @@ namespace AudioSurveyApi.Services
 
         public UserServices(IAudioSurveyDatabaseSettings settings)
         {
+            Console.WriteLine(settings.ConnectionString);
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
             _users = database.GetCollection<User>(settings.UsersCollectionName);
@@ -33,19 +32,21 @@ namespace AudioSurveyApi.Services
         {
             string userId = "";
             string savedPasswordHash = "";
-            Console.WriteLine("Insert " + userIn.Password);
+            Random rnd = new Random();
 
-
-            var builder = Builders<User>.Filter;
-            var nameFilter = builder.Eq("Name", userIn.Username);
+          
+            var nameFilter = Builders<User>.Filter.Eq("Name", userIn.Username);
             var user = _users.Find(nameFilter).FirstOrDefault();
+            var idFilter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(user.Id));
+            var setAuthTokenFilter = Builders<User>.Update.Set("authToken",rnd.Next(500,100000).ToString());
             if (user == null)
             {
                 return userId;
             }
+
             savedPasswordHash = user.Password;
             byte[] hashBytes = Convert.FromBase64String(savedPasswordHash);
-            byte[] salt = new byte[128 / 8];
+            byte[] salt = new byte[16];
             Array.Copy(hashBytes, 0, salt, 0, 16);
             var pbkdf2 = new Rfc2898DeriveBytes(userIn.Password, salt, 10000);
             byte[] hash = pbkdf2.GetBytes(20);
@@ -61,13 +62,22 @@ namespace AudioSurveyApi.Services
             if (user.ToJson() != "null")
             {
                 userId = user.Id;
+                 _users.UpdateOne(idFilter, setAuthTokenFilter);
             }
+            
             return userId;
         }
 
+        public String GetUserAuthToken(string userId)
+        {
+            string userAuthToken = "";
+            var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(userId));
+            var user = _users.Find(filter).FirstOrDefault();
+            userAuthToken = user.authToken;
+            return userAuthToken;
+        }
         public User Create(User user)
         {
-            Console.WriteLine("Insert " + user.Password);
             byte[] salt;
             new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
             var pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, 10000);

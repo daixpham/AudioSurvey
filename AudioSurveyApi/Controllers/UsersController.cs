@@ -50,6 +50,14 @@ namespace AudioSurveyApi.Controllers
             return userId;
         }
 
+        [HttpGet("authToken/{id:length(24)}", Name = "GetUserAuthToken")]
+        public ActionResult<String> UserAuthToken(string id)
+        {
+            string authToken = "";
+            authToken = _userService.GetUserAuthToken(id);
+            return authToken;
+        }
+
         [HttpPost]
         public ActionResult<User> Create(User user)
         {
@@ -77,7 +85,7 @@ namespace AudioSurveyApi.Controllers
         public IActionResult UpdateSurvey(string id, SurveyResult surveyResultIn)
         {
             var user = _userService.Get(id);
-            
+
             if (user == null)
             {
                 return NotFound();

@@ -6,6 +6,8 @@ import CreateQuestion from "./create-survey/CreateQuestion";
 import Complete from "./create-survey/Complete";
 import NavBar from "./Navbar";
 import AuthContext from "./AuthContext";
+import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
 const { Step } = Steps;
 let Survey = {
   surveyname: "",
@@ -27,6 +29,8 @@ const steps = [
   },
 ];
 
+const cookies = new Cookies();
+
 class CreateSurvey extends React.Component {
   constructor(props) {
     super(props);
@@ -35,6 +39,7 @@ class CreateSurvey extends React.Component {
       steps: null,
       value: 1,
       nextButtonDisable: true,
+      authToken: null,
       userId: this.props.match.params.id,
     };
 
@@ -42,6 +47,17 @@ class CreateSurvey extends React.Component {
   }
 
   componentWillMount() {
+    fetch("https://localhost:5001/api/users/authToken/" + this.state.userId)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+
+        this.setState({ authToken: data });
+      })
+      .catch((error) => console.log(error));
+
     steps[0].content = <SetName key={0} handler={this.handler}></SetName>;
     steps[1].content = (
       <CreateQuestion handler={this.handler} key={1}></CreateQuestion>
@@ -105,13 +121,16 @@ class CreateSurvey extends React.Component {
 
   render() {
     const { current } = this.state;
-    if(AuthContext._currentValue === false){
+    const authToken = cookies.get("authToken", { path: "/" });
+   
+    if (this.state.authToken != authToken) {
       return (
         <Result
-         
-          title="Great, we have done all the operations!"
-          extra={<Button type="primary">Bye!</Button>}
-        />
+        status="403"
+        title="403"
+        subTitle="Sorry, you are not authorized to access this page."
+        extra={<Button type="primary"><Link to="/login">Back Home</Link></Button>}
+      />
       );
     }
     return (

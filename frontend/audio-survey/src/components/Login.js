@@ -14,6 +14,8 @@ const cookies = new Cookies();
 export default function Login() {
   const [alert, setAlert] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState("");
+
   let routeHistory = useHistory();
   let loginData = {
     username: "",
@@ -47,12 +49,23 @@ export default function Login() {
           setLoading(false);
         } else {
           //go to Dashboard Page
-          cookies.set("authStatus", true, { path: '/', path:'/dashboard' })
+          fetch("https://localhost:5001/api/users/authToken/" + value)
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              cookies.set("authToken", data, { path: "/" });
+            })
+            .catch((error) => console.log(error));
           AuthContext._currentValue = true;
           routeHistory.push("/dashboard/" + value);
         }
       })
       .catch((error) => console.log("Unable to Auth", error));
+  }
+
+  function getAuthToken() {
+    console.log(userId);
   }
 
   return (
@@ -93,7 +106,6 @@ export default function Login() {
     </div>
   );
 }
-
 
 function AlertDiv(props) {
   return (
